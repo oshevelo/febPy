@@ -4,6 +4,7 @@ from .models import Question, Choice
     
 class QuestionListSerializer(serializers.ModelSerializer):
     
+    
     class Meta:
         model = Question
         fields = ['id', 'pub_date', 'question_text']

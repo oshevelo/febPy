@@ -10,10 +10,11 @@ class QuestionListSerializer(serializers.ModelSerializer):
 
 
 class QuestionDetailsSerializer(serializers.ModelSerializer):
+    choices = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Question
-        fields = ['id', 'pub_date', 'question_text', 'was_published_recently']
+        fields = ['id', 'pub_date', 'question_text', 'was_published_recently', 'choices']
         
 
 class ChoiceListSerializer(serializers.ModelSerializer):

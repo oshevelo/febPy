@@ -6,7 +6,7 @@ from django.contrib import admin
 
 
 class Question(models.Model):
-    question_text = models.CharField(max_length=20)
+    question_text = models.CharField(max_length=100)
     pub_date = models.DateTimeField('date published')
     
     def __str__(self):

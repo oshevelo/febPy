@@ -3,10 +3,11 @@ from .models import Question, Choice
 
     
 class QuestionListSerializer(serializers.ModelSerializer):
-    
+    choices = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Question
-        fields = ['id', 'pub_date', 'question_text']
+        fields = ['id', 'pub_date', 'question_text', 'choices']
 
 
 class QuestionDetailsSerializer(serializers.ModelSerializer):

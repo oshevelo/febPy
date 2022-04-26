@@ -13,7 +13,23 @@ class QuestionDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ['id', 'pub_date', 'question_text', 'was_published_recently']
-        
+        fields = ['id', 'pub_date','question_text']
+
+
+
+
+
+class ChoiceListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Choice
+        fields = ['id', 'question','choice_text','votes']
+
+
+class ChoiceDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Choice
+        fields = ['id', 'question', 'choice_description','votes','choice_text']
+
+
 
 

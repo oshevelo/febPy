@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_better_admin_arrayfield',
     'apps.products',
+    'apps.payments',
     'apps.userprofiles',
 ]
 

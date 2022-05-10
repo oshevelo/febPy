@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.files import File ## Для хранения в локальном каталоге
-# from cloudinary.models import CloudinaryField ## Это выключить мы не в облаке храним а в локальном каталоге!!!
 import datetime as dt
 
 # Create your models here.#
@@ -55,8 +54,7 @@ class Image(models.Model):
     descrption = models.TextField()
     location = models.ForeignKey(Location,on_delete=models.CASCADE)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
-    #######image = CloudinaryField('image')## Это выключить мы не в облаке храним а в локальном каталоге!!!
-    ## Модель хранения изображения image = ТУТ должна быть ссылка на каталог хранени, точнее файл ????????!!!!!!
+    ## Модель хранения изображения image = ТУТ должна быть ссылка на каталог хранени, точнее файла с изображением ????????!!!!!!
     time_posted = models.DateTimeField(auto_now_add=True)
 
     def save_image(self):

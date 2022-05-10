@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.files import File ## Для хранения в локальном каталоге
+from django.core.files import File      ## Для хранения в локальном каталоге #
 import datetime as dt
 
 # Create your models here.#
@@ -29,30 +29,30 @@ class Category(models.Model):
         return self.category_name
 
 
-#Location model
-class Location(models.Model):
-    location_name = models.CharField(max_length=100)
+#Product model
+class Product(models.Model):
+    Product_name = models.CharField(max_length=100)
 
 
-    def save_location(self):
+    def save_product(self):
         self.save()
 
-    def delete_location(self):
+    def delete_product(self):
         self.delete()
 
-    #Method for updating location
+    #Method for updating Product
     @classmethod
-    def update_location(cls,id,name):
+    def update_product(cls,id,name):
         cls.objects.filter(id=id).update(location_name = name)
 
     def __str__(self):
-        return self.location_name
+        return self.product_name
 
 #Image model
 class Image(models.Model):
     name = models.CharField(max_length=30)
     descrption = models.TextField()
-    location = models.ForeignKey(Location,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     ## Модель хранения изображения image = ТУТ должна быть ссылка на каталог хранени, точнее файла с изображением ????????!!!!!!
     time_posted = models.DateTimeField(auto_now_add=True)
@@ -65,8 +65,8 @@ class Image(models.Model):
 
 # Декоратор обновления онлайн
     @classmethod
-    def update_image(cls, id ,name,description , location, category):
-        update = cls.objects.filter(id = id).update(name = name,description=description,location= location,category=category)
+    def update_image(cls, id ,name,description , product, category):
+        update = cls.objects.filter(id = id).update(name = name,description=description,product= product,category=category)
         return update
 
 # Декоратор получения
@@ -83,9 +83,9 @@ class Image(models.Model):
 
 # Декоратор фильтрации по локации
     @classmethod
-    def filter_by_location(cls,location):
-        image_location = cls.objects.filter(location=location).all()
-        return image_location
+    def filter_by_Productcls,product):
+        image_product = cls.objects.filter(product=product).all()
+        return image_product
 
 
     def __str__(self):

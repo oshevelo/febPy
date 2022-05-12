@@ -5,13 +5,22 @@ from apps.feedbacks.serializers import FeedbackSerializer, FeedbackDetailSeriali
 
 
 class FeedbackList(generics.ListCreateAPIView):
-    queryset = Feedback.objects.filter(is_deleted=False)
     serializer_class = FeedbackSerializer
     pagination_class = FeedbackPagination
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Feedback.objects.filter(user_name=user, is_deleted=False)
+
+    def perform_create(self, serializer):
+        serializer.save(user_name=self.request.user)
 
 
 class FeedbackDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Feedback.objects.all()
     serializer_class = FeedbackDetailSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Feedback.objects.filter(user_name=user, is_deleted=False)

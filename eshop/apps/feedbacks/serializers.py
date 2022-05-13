@@ -7,7 +7,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ['id', 'user', 'user_email', 'user_phone', 'feedback', 'is_published']
+        fields = ['id', 'user', 'user_email', 'user_phone', 'feedback_to', 'feedback', 'is_published']
 
 
 class FeedbackDetailSerializer(serializers.ModelSerializer):
@@ -15,4 +15,4 @@ class FeedbackDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ['id', 'user', 'user_email', 'user_phone', 'feedback', 'is_published']
+        fields = ['id', 'user', 'user_email', 'user_phone', 'feedback_to', 'feedback', 'is_published']

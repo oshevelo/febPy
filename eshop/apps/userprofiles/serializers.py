@@ -15,8 +15,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
     # def validate_password(self):
 
     def create(self, validated_data):
-        print(f'validated data = {validated_data}')
         user = User.objects.create(**validated_data, is_active=False)
+        user.set_password(validated_data['password'])
+        user.save()
         return user
 
 
@@ -34,7 +35,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
                   'telephones', 'additional_emails']
 
     def update(self, instance, validated_data):
-        print(f'validated data = {validated_data}')
         user = User.objects.get(id=instance.user_id)
 
         user_data = None

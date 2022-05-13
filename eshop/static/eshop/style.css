@@ -3,6 +3,10 @@ h1 {
   color: blue;
 }
 
+input:invalid {
+  background-color: pink;
+}
+
 .webshop_form {
     margin-bottom: 2rem;
     padding: 1rem;

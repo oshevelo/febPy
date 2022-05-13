@@ -16,7 +16,7 @@ class Feedback(models.Model):
         (SOME_PROBLEM, 'Some problem'),
     ]
 
-    user_name = models.ForeignKey(User, verbose_name='User name', on_delete=models.PROTECT)
+    user = models.ForeignKey(User, related_name='feedbacks', verbose_name='User name', on_delete=models.PROTECT)
     feedback_to = models.CharField(max_length=2, choices=FEEDBACK_SUBJECT, default=SOME_QUESTION)
     user_email = models.EmailField(null=True, blank=True, verbose_name='User email')
     user_phone = PhoneNumberField(blank=True, null=True, verbose_name='User phone number')
@@ -27,8 +27,9 @@ class Feedback(models.Model):
     updated_at = models.DateTimeField(auto_now=True, editable=False, verbose_name='Updated at')
 
     def __str__(self):
-        return self.user_name.username
+        return self.user.username
 
     class Meta:
         verbose_name = 'Feedback'
         verbose_name_plural = 'Feedbacks'
+        ordering = ['created_at']

@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ''
+#SECRET_KEY = '{{ secret_key }}'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'apps.payments',
     'apps.userprofiles',
     'apps.polls',
+    'apps.stats',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +84,7 @@ WSGI_APPLICATION = 'eshop.wsgi.application'
 DATABASES = {
     'default': { 
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': '', 
+        'NAME': '',
         'USER': '', 
         'PASSWORD': '', 
         'HOST': 'localhost', 
@@ -141,5 +143,8 @@ REST_FRAMEWORK = {
     #    'rest_framework.permissions.IsAuthenticated',
     #]
 }
+try:
+    from .local_settings import *
+except ImportError as e:
+    pass
 
-from .local_settings import *

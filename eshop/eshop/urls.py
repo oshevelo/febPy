@@ -17,11 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    
+    path('feedback/', include('apps.feedbacks.urls')),
     path('', views.index, name='index'),
     path('auth/signin/', views.signin, name='signin'),
     path('auth/logout/', views.logout_user, name='logout'),

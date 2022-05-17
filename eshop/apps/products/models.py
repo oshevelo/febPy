@@ -1,29 +1,24 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Product(models.Model):
-    product_id = models.IntegerField(max_length=200)
-    product_name = models.CharField(max_length=200)
-    product_description = models.TextField()
-    product_price = models.DecimalField(max_digits=6, decimal_places=2)
+    sku = models.CharField(max_length=20)
+    name = models.CharField(max_length=200)
+    description = models.TextField(max_length=20000)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
     amount_in_stock = models.IntegerField()
-    image = models.ForeingKey(Gallery)
-    category = models.ForeignKey(Catalog)
 
     def __str__(self):
-        return self.product_name
+        return self.name
 
 class Сomments(models.Model):
-    product_id = models.ForeignKey(Product, verbose_name="Product")
-    product_name = models.ForeignKey(Product, verbose_name="product_name")
-    user = models.ForeignKey(UserProfiles)
-    comments = models.TextField()
-    product_rating = models.CharField()
+    product = models.ForeignKey(Product, verbose_name="Product", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField(max_length=20000)
+    product_rating = models.CharField(max_length=5)
     pub_date = models.DateTimeField('date published')
 
-class Catalog(Product):
-    product_id = models.ForeignKey(Product, verbose_name="Product")
-    product_name = models.ForeignKey(Product, verbose_name="product_name")
-    category = models.CharField(max_length=200)
-    manufacturer = models.CharField(max_length=200)
-# manufacturer = models.ForeignKey(Manufacturer, verbose_name=_("Manufacturer"), )
+class Category(Product):
+    category_name = models.CharField(max_length=200)
+    parent_category = models.ForeignKey('self', on_delete=models.CASCADE)
 

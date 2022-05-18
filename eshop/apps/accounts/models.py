@@ -6,15 +6,14 @@ from django.db.models.signals import post_save
 # Create your models here.
 
 class PointCount(models.Model):
-    user_id = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     points = models.FloatField()
 
 #В зависимости от накопленных за определенное время денег у пользователя будет та или иная скидка
 class Discount(models.Model):
-    user_id = models.ForeignKey(User,on_delete=models.CASCADE)
-    user_points = models.ForeignKey(PointCount,on_delete=models.CASCADE)
-    discount = models.FloatField(default=0.05)
-    percent_to_pay = models.FloatField(default=0.95)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    pointcout = models.OneToOneField(PointCount,on_delete=models.CASCADE)
+    discount = models.FloatField(default=0.05) #range 0-1. 0.05=5%
 
 #Чтобы пользователи были ещё больше замотивированы совершать новые покупки,
 #у людей будет высвечиваться то, в каком перцентиле по деньгам, потраченным на покупки, они находятся

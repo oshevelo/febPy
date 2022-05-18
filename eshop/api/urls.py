@@ -6,4 +6,6 @@ urlpatterns = [
         include('apps.polls.urls')),
     #path('orders/',
     #    include('apps.orders.urls')),
+    path('payment/',
+         include('apps.payments.urls')),
 ]

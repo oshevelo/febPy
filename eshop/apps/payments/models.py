@@ -30,7 +30,14 @@ class Payment(models.Model):
     def validate_price(value):
         if value <= 0:
             raise ValidationError(
-                'price must be higher then 0',
+                'price must be higher than 0',
+                params={'value': value},
+            )
+
+    def validate_delivery(value):
+        if value < 0:
+            raise ValidationError(
+                'delivery must be equal or be the higher than 0',
                 params={'value': value},
             )
 
@@ -38,7 +45,7 @@ class Payment(models.Model):
     payment_system = models.CharField(max_length=30, choices=PAYMENT_SYSTEM_CHOICE, default=PAYPAL)
     payment_status = models.CharField(max_length=15, choices=PAYMENT_STATUS_CHOICE, default=PROCESSING)
     products_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.0, validators=[validate_price])
-    delivery_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.0, validators=[validate_price])
+    delivery_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.0, validators=[validate_delivery])
 
     @property
     def total_price(self):

@@ -1,42 +1,47 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+
 class Shipments(models.Model):
-    userID = models.ForeignKey(UserID, on_delete=models.PROTECT)
-
-    class DeliveryCompany(models.TextChoices):
-        NEWPOST = 'NP', _('New Post')
-        UKRPOST = 'UkrP', _('Ukr Post')
-        MEEST = 'MT', _('Meest')
-        JUSTIN = 'JN', _('Justin')
-    delivery_company = models.CharField(
-        max_length=10,
-        choices=DeliveryCompany.choices,
-        default=''
-    )
-
+    NEWPOST = 'NP'
+    UKRPOST = 'UkrP'
+    MEEST = 'MT'
+    JUSTIN = 'JN'
+    DELIVERY_COMPANY =[
+        (NEWPOST, 'New Post'),
+        (UKRPOST, 'Ukr Post'),
+        (MEEST, 'Meest'),
+        (JUSTIN,'Justin'),
+    ]
+    delivery_company = models.CharField(max_length=10, choices=DELIVERY_COMPANY, default='')
+    #orderID = models.ForeignKey(Order, on_delete=models.PROTECT)
     delivery_office_number = models.IntegerField(default='')  # как подтянуть список отделений доставки?
-    addressee = models.BooleanField(default=False, help_text='Я получатель')
+    addressee_first_name = models.CharField(max_length=32)
+    addressee_last_name = models.CharField(max_length=32)
+    addressee_phone = models.CharField(max_length=10)
 
-    class Delivery(models.TextChoices):
-        PICKUP = 'PickUp', _('Pick-up from our stores')
-        PICKUP_DELIV_DEP = 'PickUpDelivDepartment', _('Pick-up from delivery department')
-        COURIER = 'Courier', _('Courier')
-    delivery = models.CharField(
-        max_length=32,
-        choices=Delivery.choices,
-        default=''
-    )
+    PICKUP = 'PickUp'
+    PICKUP_DELIV_DEP = 'PickUpDelivDepartment'
+    COURIER = 'Courier'
+    DELIVERY_METHOD=[
+        (PICKUP, 'Pick-up from our stores'),
+        (PICKUP_DELIV_DEP, 'Pick-up from delivery department'),
+        (COURIER, 'Courier')
+    ]
+    delivery = models.CharField(max_length=32, choices=DELIVERY_METHOD,default='')
 
-    class Status(models.TextChoices):                        # от куда должны обновляться статусы доставки?
-        AWAITING_SHIPMENT = 'AwaitingShipment', _('Awaiting Shipment')
-        IN_DELIVERY_SERVICE = 'InDelivery', _('In Delivery Service')
-        ON_THE_WAY = 'OnTheWay', _('On the way')
-        ON_DEPARTMENT = 'OnDepartment', _('Order on delivery department')
-        RECEIVED = 'Received', _('Received')
-    status = models.CharField(
-        max_length=32,
-        choices=Status.choices,
-        default=Status.AWAITING_SHIPMENT
-    )
+    AWAITING_SHIPMENT = 'AwaitingShipment'                       # от куда должны обновляться статусы доставки?
+    IN_DELIVERY_SERVICE = 'InDelivery'
+    ON_THE_WAY = 'OnTheWay'
+    ON_DEPARTMENT = 'OnDepartment'
+    RECEIVED = 'Received'
+    STATUS=[
+        (AWAITING_SHIPMENT, 'Awaiting Shipment'),
+        (IN_DELIVERY_SERVICE, 'In Delivery Service'),
+        (ON_THE_WAY, 'On the way'),
+        (ON_DEPARTMENT, 'Order on delivery department'),
+        (RECEIVED, 'Received'),
+    ]
+    status = models.CharField(max_length=32, choices=STATUS, default=AWAITING_SHIPMENT)
     comment = models.CharField(max_length=200)
+    delivery_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)

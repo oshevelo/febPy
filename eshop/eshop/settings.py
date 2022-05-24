@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_better_admin_arrayfield',
     'phonenumber_field',
+    'apps.shipments',
     'apps.products',
     'apps.payments',
     'apps.userprofiles',

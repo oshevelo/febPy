@@ -1,0 +1,77 @@
+h1 {
+  background-color: lightgrey;
+  color: blue;
+}
+
+input:invalid {
+  background-color: pink;
+}
+
+.webshop_form {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: solid 1px black;
+}
+
+.webshop_form_small {
+    padding: 0.25rem;
+}
+
+.container, .tab-content {
+    padding-top: 1rem;
+}
+
+.navbar-brand {
+    margin-bottom: 0;
+}
+
+.spinner {
+  position: fixed;
+  width: 95vw;
+  height: 90vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: rgba(17, 82, 202, 0.2);
+
+  display: none;
+  z-index: 10;
+}
+
+.spinner--shown{
+  display: block;
+}
+
+.spinner div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 51px;
+  height: 51px;
+  margin: 6px;
+  border: 6px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.spinner div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.spinner div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.spinner div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

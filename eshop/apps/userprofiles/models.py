@@ -1,15 +1,20 @@
 # from django.contrib.postgres.fields import ArrayField
 from django_better_admin_arrayfield.models.fields import ArrayField
 from django.contrib import admin
+from django.dispatch import receiver
 from django.db import models
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+import uuid
+from datetime import timedelta
 
-class UserProfiles(models.Model):
+DAYS_OF_SIGNUP_TOKEN_EXPIRY = 5
+
+
+class UserProfile(models.Model):
 
     UKRAINIAN = 'UA'
     ENGLISH = 'EN'
@@ -28,10 +33,10 @@ class UserProfiles(models.Model):
     ]
 
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         primary_key=True,
-        # default=1,
+        related_name='user'
     )
 
     date_of_birth = models.DateField()
@@ -46,6 +51,9 @@ class UserProfiles(models.Model):
     telephones = ArrayField(models.CharField(max_length=16), null=True, blank=True)
     additional_emails = ArrayField(models.EmailField(max_length=150), null=True, blank=True)
 
+    class Meta:
+        ordering = ['user']
+
     @admin.display(description='Full name', ordering='user')
     def full_name(self):
         return self.user.get_full_name()
@@ -55,13 +63,30 @@ class UserProfiles(models.Model):
         return self.user.email
 
 
-def create_user_profile(sender, **kwargs):
-    if sender is User:
-        # print(f'kwargs = {kwargs}')
-        up = UserProfiles(user=kwargs.get('instance'),
-                          date_of_birth=timezone.now()
-                          )
+def create_activation_token():
+    return uuid.uuid4()
+
+
+class OneTimeToken(models.Model):
+    token = models.CharField(primary_key=True, max_length=150, default=create_activation_token)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='token_bearer'
+    )
+    date_of_expiry = models.DateField()
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, created, **kwargs):
+    if sender is User and created:
+        user = kwargs.get('instance')
+        up = UserProfile(user=user,
+                         date_of_birth=timezone.now()
+                         )
         up.save()
-
-
-post_save.connect(create_user_profile)
+        if not user.is_active:
+            ott = OneTimeToken.objects.create(user=user,
+                                              date_of_expiry=timezone.now()+timedelta(days=DAYS_OF_SIGNUP_TOKEN_EXPIRY)
+                                              )
+            print(f'Not active, token={ott.token}')

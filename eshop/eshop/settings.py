@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ''
+#SECRET_KEY = '{{ secret_key }}'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -40,11 +41,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_better_admin_arrayfield',
     'phonenumber_field',
+    'apps.shipments',
     'apps.products',
     'apps.payments',
     'apps.userprofiles',
     'apps.polls',
+    'apps.stats',
     'apps.feedbacks',
+<<<<<<< HEAD
+    'apps.notifications',
+=======
+    'apps.galleries'
+>>>>>>> 1cccbb0bab401b1f5ef9f95927529566e226aad5
 ]
 
 MIDDLEWARE = [
@@ -84,7 +92,7 @@ WSGI_APPLICATION = 'eshop.wsgi.application'
 DATABASES = {
     'default': { 
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': '', 
+        'NAME': '',
         'USER': '', 
         'PASSWORD': '', 
         'HOST': 'localhost', 
@@ -153,3 +161,4 @@ REST_FRAMEWORK = {
 
 # LOGIN_REDIRECT_URL = '/'
 from .local_settings import *
+

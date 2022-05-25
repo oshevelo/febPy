@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.userprofiles',
     'apps.polls',
     'apps.feedbacks',
+    'apps.notifications',
 ]
 
 MIDDLEWARE = [

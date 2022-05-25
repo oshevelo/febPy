@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 # Create your models here.
-# from eshop.apps.orders.models import Order
+# from apps.orders.models import Order
 
 
 class Payment(models.Model):
@@ -42,8 +42,8 @@ class Payment(models.Model):
             )
 
     # order = models.ForeignKey(Order, on_delete=models.PROTECT)
-    payment_system = models.CharField(max_length=30, choices=PAYMENT_SYSTEM_CHOICE, default=PAYPAL)
-    payment_status = models.CharField(max_length=15, choices=PAYMENT_STATUS_CHOICE, default=PROCESSING)
+    system = models.CharField(max_length=30, choices=PAYMENT_SYSTEM_CHOICE, default=PAYPAL)
+    status = models.CharField(max_length=15, choices=PAYMENT_STATUS_CHOICE, default=PROCESSING)
     products_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.0, validators=[validate_price])
     delivery_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.0, validators=[validate_delivery])
 

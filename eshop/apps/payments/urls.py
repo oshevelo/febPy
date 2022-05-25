@@ -10,16 +10,12 @@
 # ]
 
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+
 from . import views
 
-
-router = DefaultRouter()
-router.register(r'Payment', views.PaymentViewSet, basename='payment')
-router.register(r'PaymentLog', views.PaymentLogViewSet, basename='paymentlog')
-router.register(r'User', views.UserViewSet, basename='user')
-
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', views.index),
+    path('pay/', views.PaymentList.as_view(), name='PaymentList'),
+    path('log/', views.PaymentSystemLogList.as_view(), name='PaymentLogList'),
 
 ]

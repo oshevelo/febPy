@@ -35,6 +35,7 @@ class Payment(models.Model):
             )
 
     # order = models.ForeignKey(Order, on_delete=models.PROTECT)
+
     payment_system = models.CharField(max_length=30, choices=PAYMENT_SYSTEM_CHOICE, default=PAYPAL)
     payment_status = models.CharField(max_length=15, choices=PAYMENT_STATUS_CHOICE, default=PROCESSING)
     products_price = models.DecimalField(max_digits=9, decimal_places=2, default=0.0, validators=[validate_price])

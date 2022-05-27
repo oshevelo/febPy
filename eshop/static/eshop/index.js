@@ -170,7 +170,7 @@ function fillUserProfileForm(obj){
                                                         const inp = document.createElement("input");
                                                         inp.setAttribute("name", `tel-${idx}`);
                                                         inp.setAttribute("type", "tel");
-                                                        inp.setAttribute("pattern", "^\\+?[0-9-]{7,16}");
+                                                        inp.setAttribute("pattern", "^\\+?[\\d-]{1,15}$");
                                                         inp.value = tel;
                                                         tel_info.appendChild(inp);
                                                         })
@@ -183,7 +183,7 @@ function fillUserProfileForm(obj){
                                                         const inp = document.createElement("input");
                                                         inp.setAttribute("name", `email-${idx}`);
                                                         inp.setAttribute("type", "email");
-                                                        inp.setAttribute("pattern", "\\w+@.+\\..+");
+                                                        inp.setAttribute("pattern", "[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,}$");
                                                         inp.setAttribute("maxlength", "50");
                                                         inp.value = email;
                                                         add_email_info.appendChild(inp);
@@ -216,7 +216,7 @@ const putUserInfo = pppRequestHandlerDecorator('PUT', apiProfileUrl, getDataFrom
     fillUserProfileForm, null, 'User\'s profile updated', 'Update user error:');
 
 const signupUser = pppRequestHandlerDecorator('POST',
-    apiProfileUrl+'create/', getDataFromSignupForm, respondToSignUp, null, 'New user created!\nPlease find the activation link', 'Registration error:');
+    apiProfileUrl+'signup/', getDataFromSignupForm, respondToSignUp, null, 'New user created!\nPlease find the activation link', 'Registration error:');
 
 //-----------------Adding listeners------------------------
 const userProfileTab = document.querySelector("#pills-profile-tab");

@@ -1,33 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.template import loader, RequestContext
+from django.template import loader
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
-import sys
-sys.path.append(".")
-from apps.userprofiles.models import OneTimeToken
 
-# def index(request):
-#     template = loader.get_template('main.html')
-#     auth_form = AuthenticationForm()
-#     create_new_user_form = UserCreationForm()
-#     context = {
-#         'create_new_user_form': create_new_user_form,
-#         'auth_form': auth_form,
-#     }
-#     if request.method == 'GET':
-#         return HttpResponse(template.render(context, request))
-#     else:
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             login(request, user)
-#             request_context = RequestContext(request)
-#             return HttpResponse(template.render(request_context.push(context), request))
-#         else:
-#             return HttpResponse('No such a user exists', request)
+from apps.userprofiles.models import OneTimeToken
+from eshop.settings import TOKEN_TTL
+
 
 def index(request):
     template = loader.get_template('main.html')
@@ -42,10 +22,10 @@ def index(request):
 
 
 def signin(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
+    user = authenticate(request,
+                        username=request.POST['username'],
+                        password=request.POST['password'])
+    if user:
         login(request, user)
     return HttpResponseRedirect('/')
 
@@ -73,8 +53,12 @@ def activate(request):
                 context['response'] = 'Your account has been activated successfully!'
             else:
                 token.delete()
-                user.delete()
-                context['response'] = 'This token is expired. Please sign up again.'
+                ott = OneTimeToken.objects.create(user=user,
+                                                  date_of_expiry=timezone.now() + TOKEN_TTL
+                                                  )
+                ott.send_activation_link()
+                context['response'] = 'This token is expired.\nA new token has been sent to the email.\nPlease follow ' \
+                                      'the activation link again. '
     else:
         context['response'] = 'The query string is not valid'
 

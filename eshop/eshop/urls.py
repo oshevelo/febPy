@@ -23,4 +23,9 @@ urlpatterns = [
     path('api/', include('api.urls')),
     
     path('', views.index, name='index'),
+    path('auth/signin/', views.signin, name='signin'),
+    path('auth/logout/', views.logout_user, name='logout'),
+    path('activate/', views.activate, name='activate'),
+#    path('notifications/', include('apps.notifications.urls')),
+    # expects GET request like http://127.0.0.1:8000/activate/?token=4c3a4188-6060-4f09-954e-f473ff9f214b
 ]

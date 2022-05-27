@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'apps.stats',
     'apps.feedbacks',
     'apps.notifications',
-    'apps.galleries'
+    'apps.galleries',
+    'apps.orders',
 ]
 
 MIDDLEWARE = [

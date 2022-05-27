@@ -9,9 +9,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 import uuid
-from datetime import timedelta
 
-DAYS_OF_SIGNUP_TOKEN_EXPIRY = 5
+from eshop.settings import TOKEN_TTL
 
 
 class UserProfile(models.Model):
@@ -76,17 +75,20 @@ class OneTimeToken(models.Model):
     )
     date_of_expiry = models.DateField()
 
+    def send_activation_link(self):
+        print(f'Sent to email={self.user.email}, link=http://127.0.0.1:8000/activate/?token={self.token}')
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, created, **kwargs):
-    if sender is User and created:
+    if created:
         user = kwargs.get('instance')
-        up = UserProfile(user=user,
+        up = UserProfile.objects.create(user=user,
                          date_of_birth=timezone.now()
                          )
-        up.save()
+
         if not user.is_active:
             ott = OneTimeToken.objects.create(user=user,
-                                              date_of_expiry=timezone.now()+timedelta(days=DAYS_OF_SIGNUP_TOKEN_EXPIRY)
+                                              date_of_expiry=timezone.now()+TOKEN_TTL
                                               )
-            print(f'Not active, token={ott.token}')
+            ott.send_activation_link()

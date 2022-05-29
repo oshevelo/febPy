@@ -8,7 +8,7 @@ from django.utils import timezone
 # предпочтения раpython manage.py migrateзные из товаров магазина, лог предыдущих покупок
 # user_account -  это личный счет для бонусов
 # модель может иметь одно или больше полей. Каждое поле соответствует полю в таблице. make migration and then migrate
-# python manage.py migrategit commit -m ""
+# python manage.py migrate git commit -m ""
 
 # python manage.py makemigrations polls после завершения создания моделей
 

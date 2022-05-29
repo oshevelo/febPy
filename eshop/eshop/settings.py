@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ''
+#SECRET_KEY = '{{ secret_key }}'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -39,11 +41,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_better_admin_arrayfield',
+    'phonenumber_field',
+    'apps.shipments',
     'apps.products',
     'apps.payments',
     'apps.userprofiles',
     'apps.polls',
-    'apps.accounts',
+    'apps.stats',
+    'apps.feedbacks',
+    'apps.notifications',
+    'apps.galleries',
+    'apps.orders'
 ]
 
 MIDDLEWARE = [
@@ -61,7 +69,7 @@ ROOT_URLCONF = 'eshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +91,7 @@ WSGI_APPLICATION = 'eshop.wsgi.application'
 DATABASES = {
     'default': { 
         'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'NAME': '', 
+        'NAME': '',
         'USER': '', 
         'PASSWORD': '', 
         'HOST': 'localhost', 
@@ -130,6 +138,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -142,5 +157,8 @@ REST_FRAMEWORK = {
     #    'rest_framework.permissions.IsAuthenticated',
     #]
 }
+
+# LOGIN_REDIRECT_URL = '/'
+TOKEN_TTL = timedelta(days=5)
 
 from .local_settings import *

@@ -1,24 +1,185 @@
-"""eshop URL Configuration
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path
-from . import views
+    <!-- Bootstrap CSS https://getbootstrap.com/docs/4.0/components/navs/#using-data-attributes-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'eshop/style.css' %}">
+    <title>Webshop</title>
+</head>
+
+<body>
+<div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <p class="navbar-brand">Webshop</p>
+
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pills-products-tab" data-toggle="pill" href="#pills-products" role="tab"
+                   aria-controls="pills-products" aria-selected="true">Products</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
+                   aria-controls="pills-profile" aria-selected="false">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-cart-tab" data-toggle="pill" href="#pills-cart" role="tab"
+                   aria-controls="pills-cart" aria-selected="false">Cart</a>
+            </li>
+            {% endif %}
+        </ul>
+
+        <div class="d-flex flex-row">
+            {% if user.is_authenticated %}
+            <form action="auth/logout/" method="post" id="logout" class="form-inline">
+                {% csrf_token %}
+                <label>User: {{ user.get_username }}</label>
+                <input type="submit" value="Logout" class="form-control">
+            </form>
+            {% else %}
+
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="signinDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Sign in
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <form action="auth/signin/" method="post" id="signin" class="webshop_form_small">
+                        {% csrf_token %}
+                        {{ auth_form }}
+                        <input type="submit" value="Sign in">
+                    </form>
+                </div>
+            </div>
+
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="signupDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Sign up
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <form id="signup-form" class="webshop_form_small">
+<!--                        {% csrf_token %}-->
+<!--                        {{ create_new_user_form }}-->
+                        <label>Username (up to 30 chars)
+                            <input type="text" maxlength="30" name="username" required>
+                        </label>
+                        <label>Email
+                            <input type="email" pattern="[\w\.-]+@[\w\.-]+\.\w{2,}$" name="email" required>
+                        </label>
+                        <label>Password (5-30 chars)
+                            <input type="password" minlength="5" maxlength="30" id="password" required>
+                        </label>
+                        <label>Confirm password
+                            <input type="password" minlength="5" maxlength="30" id="confirmPassword" required>
+                        </label>
+
+                        <input type="submit" value="Sign up">
+                    </form>
+                </div>
+            </div>
 
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-]
+            {% endif %}
+
+        </div>
+    </nav>
+
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-products" role="tabpanel" aria-labelledby="pills-products-tab">
+            products
+        </div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+<!--            <form id="getUserProfileForm" class="webshop_form">-->
+<!--                <div class="form-group">-->
+<!--                    <p>Get user profile</p>-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--            </form>-->
+
+<!--            <div id="userProfileOutputField"></div>-->
+            <form id="user-profile-form" class="webshop_form">
+                <h4>User name
+                    <p id="username"></p>
+                </h4>
+                <div class="form-group" id="main-info">
+                    <label>First name
+                        <input type="text" name="first_name">
+                    </label>
+                    <label>Last name
+                        <input type="text" name="last_name">
+                    </label>
+                    <label>Date of birth
+                        <input type="date" name="date_of_birth" required>
+                    </label>
+                    <label>Sex
+                        <select name="sex">
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </label>
+                    <label>Preferable language
+                        <select name="preferable_language">
+                            <option value="EN">English</option>
+                            <option value="UA">Ukrainian</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-group" id="additional-info">
+                    <h4>
+                        Addresses of delivery
+                    </h4>
+                    <div class="form-group" id="addresses">
+                    </div>
+                    <h4>
+                        Telephones
+                    </h4>
+                    <div class="form-group" id="telephones">
+                    </div>
+                    <h4>
+                        Additional e-mails
+                    </h4>
+                    <div class="form-group" id="add-emails">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="pills-cart" role="tabpanel" aria-labelledby="pills-cart-tab">cart</div>
+    </div>
+
+    <div class="spinner" id="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    {% load static %}
+    <script src="{% static 'eshop/index.js' %}"></script>
+
+</div>
+</div>
+</body>
+</html>

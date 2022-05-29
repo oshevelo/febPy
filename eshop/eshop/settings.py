@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,11 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_better_admin_arrayfield',
+    'phonenumber_field',
     'apps.products',
     'apps.payments',
     'apps.userprofiles',
     'apps.polls',
     'apps.stats',
+    'apps.feedbacks',
+    'apps.galleries'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +63,7 @@ ROOT_URLCONF = 'eshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,6 +128,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -137,5 +147,10 @@ REST_FRAMEWORK = {
     #    'rest_framework.permissions.IsAuthenticated',
     # ]
 }
+<<<<<<< HEAD
+=======
+
+# LOGIN_REDIRECT_URL = '/'
+>>>>>>> ddec79e16bc342947db1fb51248ce7bc50170e97
 from .local_settings import *
 

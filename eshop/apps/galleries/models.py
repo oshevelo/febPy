@@ -7,11 +7,11 @@ from django.db import models
 #Image model
 class Image(models.Model):
 #    product = models.ForeignKey('products.Product', on_delete=models.SET_NULL,
-#                                null=True, blank=True, verbose_name='Product', default='NULL')
-    name = models.CharField(max_length=30, default='NULL')
-    descrption = models.TextField(max_length=1000, default='NULL')
+#                                null=True, blank=True, verbose_name='Product', null=True, blank=True)
+    name = models.CharField(max_length=30, null=True, blank=True)
+    descrption = models.TextField(max_length=1000, default='N/A')
 
-    upload = models.ImageField(upload_to='uploads/%Y/%m/%d/', default='NULL')
+    upload = models.ImageField(upload_to='uploads/%Y/%m/%d/', default='uploads/no_image.png')
 
     SMALL = 'SMALL'
     MEDIUM = 'MEDIUM'
@@ -25,10 +25,10 @@ class Image(models.Model):
     size = models.CharField(max_length=30, choices=SIZE_CHOICE, default=SMALL)
     time_posted = models.DateTimeField(auto_now_add=True)
 
-    def save_image(self):
-        self.save()
+    def save(self, *args, **kwargs):
 
-    def delete_image(self):
+
+    def delete(self, *args, **kwargs):
         self.delete()
 
 # Метод обновления онлайн

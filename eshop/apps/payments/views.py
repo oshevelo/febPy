@@ -8,8 +8,8 @@ from rest_framework import generics, pagination
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from .permissions import IsOwnerOrPutOnly
 from django.db.models import Q
+
 
 
 def Index(request):
@@ -30,7 +30,7 @@ class PaymentList(generics.ListAPIView):
 
 class PaymentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PaymentListSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrPutOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         if self.request.user.is_superuser:

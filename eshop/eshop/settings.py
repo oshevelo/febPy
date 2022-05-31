@@ -48,11 +48,10 @@ INSTALLED_APPS = [
     'apps.polls',
     'apps.stats',
     'apps.feedbacks',
-<<<<<<< HEAD
     'apps.notifications',
-=======
-    'apps.galleries'
->>>>>>> 1cccbb0bab401b1f5ef9f95927529566e226aad5
+    'apps.galleries',
+    'apps.accounts',
+    'apps.orders'
 ]
 
 MIDDLEWARE = [

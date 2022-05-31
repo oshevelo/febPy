@@ -1,13 +1,13 @@
 from django.db import models
-#from django.db import product
+from apps.products.models import Product
 
 # Create your models here.#
 
 
 #Image model
 class Image(models.Model):
-#    product = models.ForeignKey('products.Product', on_delete=models.SET_NULL,
-#                                null=True, blank=True, verbose_name='Product', null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL,
+                               verbose_name='Product', null=True, blank=True)
     name = models.CharField(max_length=30, null=True, blank=True)
     descrption = models.TextField(max_length=1000, default='N/A')
 
@@ -25,11 +25,6 @@ class Image(models.Model):
     size = models.CharField(max_length=30, choices=SIZE_CHOICE, default=SMALL)
     time_posted = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-
-
-    def delete(self, *args, **kwargs):
-        self.delete()
 
 # Метод обновления онлайн
     @classmethod

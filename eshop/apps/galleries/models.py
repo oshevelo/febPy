@@ -1,8 +1,6 @@
 from django.db import models
 from apps.products.models import Product
 
-# Create your models here.#
-
 
 #Image model
 class Image(models.Model):
@@ -35,4 +33,3 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
-

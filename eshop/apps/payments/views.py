@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import viewsets
 from django.contrib.auth.models import User
 from django.db.models import Q
-from api.permissions import RequestIsReadOnly, RequestIsUpdate, RequestIsDelete
+# from api.permissions import RequestIsReadOnly, RequestIsUpdate, RequestIsDelete
 
 
 
@@ -37,17 +37,17 @@ class PaymentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PaymentListSerializer
     permission_classes = [
                IsAuthenticated,
-               Or(
-                    RequestIsReadOnly,
-                    And(
-                        RequestIsUpdate,
-                        IsEditable
-                    ),
-                    And(
-                         RequestIsDelete,
-                         IsOwnedBy
-                    )
-               )
+    #            Or(
+    #                 RequestIsReadOnly,
+    #                 And(
+    #                     RequestIsUpdate,
+    #                     IsEditable
+    #                 ),
+    #                 And(
+    #                      RequestIsDelete,
+    #                      IsOwnedBy
+    #                 )
+    #            )
          ]
 
 

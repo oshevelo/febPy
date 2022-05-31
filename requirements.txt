@@ -9,3 +9,5 @@ django-better-admin-arrayfield==1.4.2
 django-phonenumber-field==6.1.0
 phonenumbers==8.12.48
 psycopg2-binary==2.9.3
+Pillow==9.1.1
+social-auth-app-django==5.0.0

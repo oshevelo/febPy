@@ -46,14 +46,14 @@ class Order(models.Model):
         decimal_places=2,
         validators=[validate_order_value]
     )
-    delivery_address = models.ForeignKey(Shipments, on_delete=models.CASCADE, related_name='Delivery_Address')
+    delivery_address = models.ForeignKey(Shipments, on_delete=models.CASCADE, related_name='Delivery_Address', null=True)
 
     def __str__(self):
         return f'{self.user}, {self.created}'
 
 
 class OrderItem(models.Model):
-    product = models.ForeignKey(Product, related_name='products', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='products', on_delete=models.CASCADE, null=True)
     order = models.ForeignKey(Order, related_name='Order', on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 

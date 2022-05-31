@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 
 import uuid
 
-from eshop.settings import TOKEN_TTL
+from eshop.settings import TOKEN_TTL, PROJECT_BASE_URL
 
 
 class UserProfile(models.Model):
@@ -76,7 +76,7 @@ class OneTimeToken(models.Model):
     date_of_expiry = models.DateField()
 
     def send_activation_link(self):
-        print(f'Sent to email={self.user.email}, link=http://127.0.0.1:8000/activate/?token={self.token}')
+        print(f'Sent to email={self.user.email}, link={PROJECT_BASE_URL}activate/?token={self.token}')
 
 
 @receiver(post_save, sender=User)

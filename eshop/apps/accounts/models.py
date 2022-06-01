@@ -51,7 +51,7 @@ def create_discount(sender,instance,created,**kwargs):
 @receiver(post_save,sender=PointCount)
 def create_rating(sender,instance,created,**kwargs):
     if created:
-        Rating.objects.create(pointcount=instance,user=instance.user)
+        Rating.objects.create(pointcount=instance,user_id=instance.user)
 
 
 #UPDATING MODELS (TO DO)

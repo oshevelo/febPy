@@ -8,7 +8,7 @@ class RatingAdmin(admin.ModelAdmin):
 
 
 class PointCountAdmin(admin.ModelAdmin):
-    fields=['user','points']
+    fields=['user_id','points']
 
 class DiscountAdmin(admin.ModelAdmin):
     fields=['user','pointcount','discount','prev_count']

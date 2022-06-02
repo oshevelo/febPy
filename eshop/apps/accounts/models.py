@@ -39,7 +39,8 @@ class Rating(models.Model):
 @receiver(post_save,sender=User)
 def create_points_count(sender,instance,created,**kwargs):
     if created:
-        PointCount.objects.create(user=instance,points=0)
+        PointCount.objects.raw(f"INSERT VALUES({instance}, 0)")
+        #PointCount.objects.create(user=instance,points=0)
 
 #creating discount table instance
 @receiver(post_save,sender=PointCount)

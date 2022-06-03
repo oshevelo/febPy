@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from .models import Question, Choice
 from .serializers import QuestionListSerializer, QuestionDetailsSerializer
+from .filters import QuestionFilter
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, pagination
 from rest_framework.permissions import IsAuthenticated
@@ -19,12 +20,15 @@ class QuestionList(generics.ListCreateAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionListSerializer
     pagination_class = pagination.LimitOffsetPagination
+    filterset_class = QuestionFilter
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+    
+        result = Question.objects.all()
         if self.request.user.is_superuser:
-            return Question.objects.all()
-        return Question.objects.filter(author=self.request.user)
+            return result
+        return result.filter(author=self.request.user)
     
 
 class QuestionOList(generics.ListCreateAPIView):

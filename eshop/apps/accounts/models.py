@@ -29,7 +29,7 @@ class Discount(models.Model):
 #Это добавит элемент соревновательности в ситсему
 class Rating(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    points = models.OneToOneField(PointCount,on_delete=models.CASCADE)
+    pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
     percentile=models.FloatField(default=100)
 
 #TO DO
@@ -39,20 +39,20 @@ class Rating(models.Model):
 @receiver(post_save,sender=User)
 def create_points_count(sender,instance,created,**kwargs):
     if created:
-        PointCount.objects.raw(f"INSERT VALUES({instance}, 0)")
-        #PointCount.objects.create(user=instance,points=0)
+        #PointCount.objects.raw(f"INSERT VALUES({instance}, 0)")
+        PointCount.objects.create(user=instance,points=0)
 
 #creating discount table instance
 @receiver(post_save,sender=PointCount)
 def create_discount(sender,instance,created,**kwargs):
     if created:
-        Discount.objects.create(points=instance,user=instance.user,discount=0.05)
+        Discount.objects.create(pointcount=instance,user=instance.user,discount=0.05)
 
 #Creating rating table model
 @receiver(post_save,sender=PointCount)
 def create_rating(sender,instance,created,**kwargs):
     if created:
-        Rating.objects.create(pointcount=instance,user_id=instance.user)
+        Rating.objects.create(pointcount=instance,user=instance.user)
 
 
 #UPDATING MODELS (TO DO)

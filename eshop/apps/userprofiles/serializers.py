@@ -35,7 +35,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
                   'telephones', 'additional_emails']
 
     def update(self, instance, validated_data):
-        user = User.objects.get(id=instance.user_id)
+        # user = User.objects.get(id=instance.user_id)
+        user = self.context['request'].user
 
         user_data = None
         if 'user' in validated_data:

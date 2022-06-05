@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.contrib.auth.views import auth_logout
 from . import views
 
 urlpatterns = [
@@ -26,5 +28,10 @@ urlpatterns = [
     path('auth/logout/', views.logout_user, name='logout'),
     path('stat/', include('apps.stats.urls')),
     path('activate/', views.activate, name='activate'),
-    # expects GET request like http://127.0.0.1:8000/activate/?token=4c3a4188-6060-4f09-954e-f473ff9f214b
+    path('', include('social_django.urls', namespace='social')),
+    path('logout/', auth_logout, {'next_page': settings.LOGOUT_REDIRECT_URL},
+         name='logout'),
+#    path('notifications/', include('apps.notifications.urls')),
+    path('notifications/', include('apps.notifications.urls')),
+#s GET request like http://127.0.0.1:8000/activate/?token=4c3a4188-6060-4f09-954e-f473ff9f214b
 ]

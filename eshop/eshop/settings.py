@@ -159,12 +159,6 @@ REST_FRAMEWORK = {
 }
 
 
-
-# LOGIN_REDIRECT_URL = '/'
-
-from .local_settings import *
-
-
 PROJECT_BASE_URL = 'http://127.0.0.1:8000/'
 
 TOKEN_TTL = timedelta(days=5)

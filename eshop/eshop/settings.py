@@ -157,15 +157,13 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
-<<<<<<< HEAD
+
 
 
 # LOGIN_REDIRECT_URL = '/'
 
 from .local_settings import *
-=======
 
->>>>>>> 31c6e22a8ef16d8b8c91a28a35ad5fe87234e914
 
 PROJECT_BASE_URL = 'http://127.0.0.1:8000/'
 

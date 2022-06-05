@@ -55,3 +55,4 @@ class RecalculationProfileChildrenChanges(TestCase):
             "previous": None,
             "results": []
         })
+        

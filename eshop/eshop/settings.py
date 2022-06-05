@@ -147,10 +147,9 @@ REST_FRAMEWORK = {
     #    'rest_framework.permissions.IsAuthenticated',
     # ]
 }
-<<<<<<< HEAD
-=======
+
 
 # LOGIN_REDIRECT_URL = '/'
->>>>>>> ddec79e16bc342947db1fb51248ce7bc50170e97
+
 from .local_settings import *
 

@@ -18,7 +18,7 @@ class UserAction(models.Model):
 
     # считаем кол-во походов на сайт
 
-    def count_entrance_user(self, user=user):
+    def count_entrance_user(self, user):
         return UserAction.object.filter(data__action='login', user=user).count()
 
 

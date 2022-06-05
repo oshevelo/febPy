@@ -1,3 +1,18 @@
-from django.shortcuts import render
+from .models import UserAction
+from .serializers import UserActionSerializer
+from rest_framework import generics
 
-# Create your views here.
+
+class UserActionList(generics.ListCreateAPIView):
+    queryset = UserAction.objects.all()
+    serializer_class = UserActionSerializer
+
+
+
+
+
+
+
+
+
+

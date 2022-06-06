@@ -8,4 +8,6 @@ urlpatterns = [
         include('apps.userprofiles.urls')),
     path('payment/',
          include('apps.payments.urls')),
+    path('galleries/',
+         include('apps.galleries.urls'))
 ]

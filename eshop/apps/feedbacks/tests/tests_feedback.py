@@ -2,16 +2,14 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 from django.urls import reverse
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
 from apps.feedbacks.models import Feedback
-from utils.helpers_for_tests import create_user
+from utils.helpers_for_tests import create_user, create_superuser
 
 
 class FeedbackTest(TestCase):
     def setUp(self):
         self.c = APIClient()
-        self.super_admin = create_user("odin", True)
+        self.super_admin = create_superuser("odin")
         self.no_admin = create_user("pedro")
 
     def test_list_check_permission(self):

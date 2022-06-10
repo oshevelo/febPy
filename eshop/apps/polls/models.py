@@ -11,6 +11,7 @@ class Question(models.Model):
     pub_date = models.DateTimeField('date published')
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     editor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='edited_questions')
+    is_sold = models.BooleanField(default=False)
     
     def __str__(self):
         return "{} published at {}".format(self.question_text, self.pub_date)

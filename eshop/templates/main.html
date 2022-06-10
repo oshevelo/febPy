@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -15,6 +15,8 @@
 </head>
 
 <body>
+<!-- Replace "test" with your own sandbox Business account app client ID -->
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
 <div class="container">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
@@ -33,6 +35,10 @@
             <li class="nav-item">
                 <a class="nav-link" id="pills-cart-tab" data-toggle="pill" href="#pills-cart" role="tab"
                    aria-controls="pills-cart" aria-selected="false">Cart</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="pills-payment-tab" data-toggle="pill" href="#pills-payment" role="tab"
+                   aria-controls="pills-payment" aria-selected="false">Payment</a>
             </li>
             {% endif %}
         </ul>
@@ -55,6 +61,7 @@
                     <form action="auth/signin/" method="post" id="signin" class="webshop_form_small">
                         {% csrf_token %}
                         {{ auth_form }}
+                        <a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}">Use Google</a>
                         <input type="submit" value="Sign in">
                     </form>
                 </div>
@@ -67,8 +74,8 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <form id="signup-form" class="webshop_form_small">
-<!--                        {% csrf_token %}-->
-<!--                        {{ create_new_user_form }}-->
+                        <!--                        {% csrf_token %}-->
+                        <!--                        {{ create_new_user_form }}-->
                         <label>Username (up to 30 chars)
                             <input type="text" maxlength="30" name="username" required>
                         </label>
@@ -98,14 +105,6 @@
             products
         </div>
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-<!--            <form id="getUserProfileForm" class="webshop_form">-->
-<!--                <div class="form-group">-->
-<!--                    <p>Get user profile</p>-->
-<!--                </div>-->
-<!--                <button type="submit" class="btn btn-primary">Submit</button>-->
-<!--            </form>-->
-
-<!--            <div id="userProfileOutputField"></div>-->
             <form id="user-profile-form" class="webshop_form">
                 <h4>User name
                     <p id="username"></p>
@@ -155,6 +154,56 @@
             </form>
         </div>
         <div class="tab-pane fade" id="pills-cart" role="tabpanel" aria-labelledby="pills-cart-tab">cart</div>
+        <div class="tab-pane fade" id="pills-payment" role="tabpanel" aria-labelledby="pills-payment-tab">
+            <div class="card" style="width: 25rem;">
+                <div class="card-header">Paypal</div>
+                <div id="paypal-button-container" class="card-body"></div>
+                <script>
+                    paypal
+                        .Buttons({
+                            // Sets up the transaction when a payment button is clicked
+                            createOrder: function (data, actions) {
+                                return fetch("/api/orders", {
+                                    method: "post",
+                                    // use the "body" param to optionally pass additional order information
+                                    // like product ids or amount
+                                })
+                                    .then((response) => response.json())
+                                    .then((order) => order.id);
+                            },
+                            // Finalize the transaction after payer approval
+                            onApprove: function (data, actions) {
+                                return fetch(`/api/orders/${data.orderID}/capture`, {
+                                    method: "post",
+                                })
+                                    .then((response) => response.json())
+                                    .then((orderData) => {
+                                        // Successful capture! For dev/demo purposes:
+                                        console.log(
+                                            "Capture result",
+                                            orderData,
+                                            JSON.stringify(orderData, null, 2)
+                                        );
+                                        var transaction =
+                                            orderData.purchase_units[0].payments.captures[0];
+                                        alert(
+                                            "Transaction " +
+                                            transaction.status +
+                                            ": " +
+                                            transaction.id +
+                                            "\n\nSee console for all available details"
+                                        );
+                                        // When ready to go live, remove the alert and show a success message within this page. For example:
+                                        // var element = document.getElementById('paypal-button-container');
+                                        // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                                        // Or go to another URL:  actions.redirect('thank_you.html');
+                                    });
+                            },
+                        })
+                        .render("#paypal-button-container");
+                </script>
+            </div>
+        </div>
     </div>
 
     <div class="spinner" id="spinner">

@@ -46,7 +46,12 @@ class Order(models.Model):
         decimal_places=2,
         validators=[validate_order_value]
     )
-    delivery_address = models.ForeignKey(Shipments, on_delete=models.CASCADE, related_name='Delivery_Address')
+    shipment = models.ForeignKey(Shipments, on_delete=models.CASCADE, related_name='Delivery_Address')
+
+    @property
+    def delivery_address(self):
+        return f' {self.shipment.delivery_company}, {self.shipment.delivery_office_number}, {self.shipment.addressee_last_name}'
+
 
     def __str__(self):
         return f'{self.user}, {self.created}'

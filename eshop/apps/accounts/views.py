@@ -14,15 +14,25 @@ class DiscountList(generics.ListCreateAPIView):
     queryset = Discount.objects.all()
     serializer_class=DiscountModelSerializer
     def get_queryset(self):
-        if self.request.user.is_superuser():
+        if self.request.user.is_superuser:
             return Discount.objects.all()
         else:
-            return Discount.objects.filter(Q(Discount.user==self.request.user))
+            return Discount.objects.filter(Q(user=self.request.user))
+    def get_object(self):
+        if self.request.user.is_superuser:
+            return get_object_or_404(Discount,ok=self.kwargs.get("discount_id"))
+        return get_object_or_404(Discount,Q(pk=self.kwargs.get('discount_id'))&Q(user=self.request.user))
 
 
 class PointCountList(generics.ListCreateAPIView):
     queryset = PointCount.objects.all()
     serializer_class=PointCountModelSerializer
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return PointCount.objects.all()
+        else:
+            return PointCount.objects.filter(Q(user=self.request.user))
+
 
 #class RatingList(generics.ListCreateAPIView):
  #   queryset = Rating.objects.all()

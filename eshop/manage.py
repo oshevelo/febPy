@@ -3,7 +3,6 @@
 import os
 import sys
 
-#class MonthlyUpdate()
 
 def main():
     """Run administrative tasks."""

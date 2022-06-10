@@ -29,7 +29,7 @@ class Discount(models.Model):
 #Это добавит элемент соревновательности в ситсему
 class Rating(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
+    pointount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
     percentile=models.FloatField(default=100)
 
 #TO DO
@@ -72,28 +72,28 @@ def update_from_orders(sender,instance,created,**kwargs):
             user_count = PointCount.objects.get(user=instance.user)
             user_count+=instance.price
 
-def regular_update(): #either monthly or once in two months
-    for el in PointCount.objects.all():
-        points = el.points
-        user = el.user
-        discount = Discount.filter(Discount.user==user)[0]
-        discount.discount=update_discount(points)
-        discount.save()
+#def regular_update(): #either monthly or once in two months
+ #   for el in PointCount.objects.all():
+  #      points = el.points
+   #     user = el.user
+    #    discount = Discount.filter(Discount.user==user)[0]
+     #   discount.discount=update_discount(points)
+      #  discount.save()
 
 
-def update_discount(points): #do every month (will be scheduled later)
-            discount = 0
-            if points>100:
-                discount = 0.05
-            if points>500:
-                discount = 0.075
-            if points>1200:
-                discount=0.1
-            if points>2000:
-                discount=0.15
-            if points>5000:
-                discount = 0.2
-            return discount
+#def update_discount(points): #do every month (will be scheduled later)
+ #           discount = 0
+  #          if points>100:
+   #             discount = 0.05
+    #        if points>500:
+     #           discount = 0.075
+      #      if points>1200:
+       #         discount=0.1
+        #    if points>2000:
+         #       discount=0.15
+         #   if points>5000:
+          #      discount = 0.2
+           # return discount
 
 
 

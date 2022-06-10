@@ -6,4 +6,8 @@ urlpatterns = [
         include('apps.polls.urls')),
     path('userprofile/',
         include('apps.userprofiles.urls')),
- ]
+
+    path('payment/',
+         include('apps.payments.urls')),
+]
+

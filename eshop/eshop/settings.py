@@ -50,8 +50,9 @@ INSTALLED_APPS = [
     'apps.stats',
     'apps.feedbacks',
     'apps.notifications',
-    'apps.galleries',
-    'apps.orders'
+    # 'apps.galleries',
+    # 'apps.orders'
+    'apps.carts'
 ]
 
 MIDDLEWARE = [
@@ -160,5 +161,9 @@ REST_FRAMEWORK = {
 
 # LOGIN_REDIRECT_URL = '/'
 TOKEN_TTL = timedelta(days=5)
+
+QUANTITY_LIMIT = 10
+
+TOTAL_PRICE_LIMIT = 100000
 
 from .local_settings import *

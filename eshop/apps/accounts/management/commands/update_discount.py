@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand,CommandError
-from ...apps.accounts.models import Rating,PointCount,Discount
+from ...apps.accounts.models import Discount,PointCount
 from ...eshop.devs import DISCOUNT_TRESHOLDS
 
 class MonthlyUpdateDiscount(BaseCommand): #update discount 14th of every month
@@ -13,3 +13,4 @@ class MonthlyUpdateDiscount(BaseCommand): #update discount 14th of every month
                     discount = val
             el.discount = discount
             el.save()
+            self.stdout.write("Discounts updated!")

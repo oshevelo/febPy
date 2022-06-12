@@ -29,7 +29,7 @@ class Discount(models.Model):
 #Это добавит элемент соревновательности в ситсему
 class Rating(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    pointount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
+    pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
     percentile=models.FloatField(default=100)
 
 #TO DO
@@ -41,6 +41,7 @@ def create_points_count(sender,instance,created,**kwargs):
     if created:
         #PointCount.objects.raw(f"INSERT VALUES({instance}, 0)")
         PointCount.objects.create(user=instance,points=0)
+
 
 #creating discount table instance
 @receiver(post_save,sender=PointCount)
@@ -56,21 +57,41 @@ def create_rating(sender,instance,created,**kwargs):
 
 
 #UPDATING MODELS (TO DO)
+
 #update points
-@receiver(pre_save,sender=Order)
-def update_from_orders(sender,instance,created,**kwargs):
-    if not created:
-        for item in iter(kwargs.get("updated_fields")):
-            if item=='ORDER_TYPE':
-                old_instance=Order.objects.get(instance.id)
-                old_status=old_instance.status
-                if old_status=='PAID' and instance.status=='CANCELLED':
-                    user_count = PointCount.objects.get(user=instance.user)
-                    user_count.points-=instance.price
-    else:
-        if instance.status=='PAID':
-            user_count = PointCount.objects.get(user=instance.user)
-            user_count+=instance.price
+#Эта функция будет проверена и раскоменчена, когда у меня будет возможность создавать заказы
+#через админку.
+
+#@receiver(pre_save,sender=Order)
+#def update_from_orders(sender,instance,created,**kwargs):
+ #   if not created:
+  #      for item in iter(kwargs.get("updated_fields")):
+   #         if item=='ORDER_TYPE':
+    #            old_instance=Order.objects.get(instance.id)
+     #           old_status=old_instance.status
+      #          if datetime.dtatime.now().day>14:
+                    #if old_status=='PAID' and instance.status=='CANCELLED':
+                     #   user_count = PointCount.objects.get(user=instance.user)
+                      #  user_count.points-=instance.price
+                       # user_count.save()
+                    #elif instance.status=='PAID':
+                     #   user_count = PointCount.objects.get(user=instance.user)
+                      #  user_count.points+=instance.price
+                       # user_count.save()
+                #else:
+                 #   user_discount = Discount.objects.get(user=instance.user)
+                  #  if old_status=='PAID' and instance.status=='CANCELLED':
+                   #     user_discount.prev_count-=instance.price
+                    #    user_discount.save()
+                   # elif instance.status=='PAID':
+                    #    user_count = PointCount.objects.get(user=instance.user)
+                     #   user_count.points+=instance.price
+                      #  user_count.save()
+    #else:
+     #   if instance.status=='PAID':
+      #      user_count = PointCount.objects.get(user=instance.user)
+       #     user_count+=instance.price
+
 
 #def regular_update(): #either monthly or once in two months
  #   for el in PointCount.objects.all():
@@ -80,20 +101,6 @@ def update_from_orders(sender,instance,created,**kwargs):
      #   discount.discount=update_discount(points)
       #  discount.save()
 
-
-#def update_discount(points): #do every month (will be scheduled later)
- #           discount = 0
-  #          if points>100:
-   #             discount = 0.05
-    #        if points>500:
-     #           discount = 0.075
-      #      if points>1200:
-       #         discount=0.1
-        #    if points>2000:
-         #       discount=0.15
-         #   if points>5000:
-          #      discount = 0.2
-           # return discount
 
 
 

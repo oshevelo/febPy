@@ -13,7 +13,7 @@ class Product(models.Model):
         return f'product {self.name}, sku {self.sku}'
 
 
-class Сomments(models.Model):
+class Comments(models.Model):
     product = models.ForeignKey(Product, verbose_name="Product", on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField(max_length=20000)

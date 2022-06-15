@@ -11,7 +11,7 @@ urlpatterns = [
     path('discount/', views.DiscountList.as_view(), name='list'),
     path('discount/<int:notification_id>/', views.DiscountList.as_view(), name='details'),
 
-    path('rating/', views.DiscountList.as_view(), name='list'),
+    path('rating/', views.RatingList.as_view(), name='list'),
     path('rating/<int:notification_id>/', views.DiscountList.as_view(), name='details'),
 
 ]

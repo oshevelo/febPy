@@ -34,9 +34,15 @@ class PointCountList(generics.ListCreateAPIView):
             return PointCount.objects.filter(Q(user=self.request.user))
 
 
-#class RatingList(generics.ListCreateAPIView):
- #   queryset = Rating.objects.all()
-  #  serializer_class=RatingModelSerializer
+class RatingList(generics.ListCreateAPIView):
+    queryset = Rating.objects.all()
+    serializer_class=RatingModelSerializer
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return PointCount.objects.all()
+        else:
+            return PointCount.objects.filter(Q(user=self.request.user))
+
 
 
 #class RatingInstance(generics.ListCreateAPIView):

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save,pre_save
+from django.core.validators import MinValueValidator,MaxValueValidator
 
 # Create your models here.
 import datetime
@@ -14,14 +15,15 @@ from ..orders.models import Order
 
 class PointCount(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
-    points = models.FloatField()
+    points = models.FloatField(validators=[MinValueValidator(0)])
+
 
 #В зависимости от накопленных за определенное время денег у пользователя будет та или иная скидка
 class Discount(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
-    discount = models.FloatField(default=0.05) #range 0-1. 0.05=5%
-    prev_count = models.FloatField(default=0) #points collected previous month
+    discount = models.FloatField(default=0.05,validators=[MinValueValidator(0),MaxValueValidator(1)]) #range 0-1. 0.05=5%
+    prev_count = models.FloatField(default=0,validators=[MinValueValidator(0)]) #points collected previous month
 
 #Чтобы пользователи были ещё больше замотивированы совершать новые покупки,
 #у людей будет высвечиваться то, в каком перцентиле по деньгам, потраченным на покупки, они находятся
@@ -30,7 +32,7 @@ class Discount(models.Model):
 class Rating(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
-    percentile=models.FloatField(default=100)
+    percentile=models.FloatField(default=100,validators=[MinValueValidator(0),MaxValueValidator(100)])
 
 #TO DO
 

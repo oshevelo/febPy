@@ -93,14 +93,6 @@ def create_rating(sender,instance,created,**kwargs):
        #     user_count+=instance.price
 
 
-#def regular_update(): #either monthly or once in two months
- #   for el in PointCount.objects.all():
-  #      points = el.points
-   #     user = el.user
-    #    discount = Discount.filter(Discount.user==user)[0]
-     #   discount.discount=update_discount(points)
-      #  discount.save()
-
 
 
 

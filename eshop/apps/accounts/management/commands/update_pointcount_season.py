@@ -12,5 +12,6 @@ class Command(BaseCommand): #update discount 14th of every month
             el.save()
             pointcount.points = 0
             pointcount.save()
+        self.stdout.write("Season updated!")
 
 

@@ -1,6 +1,6 @@
 from django.db import models
 from apps.products.models import Product
-
+from django.contrib.auth.models import User
 
 #Image model
 class Image(models.Model):
@@ -22,7 +22,8 @@ class Image(models.Model):
     ]
     size = models.CharField(max_length=30, choices=SIZE_CHOICE, default=SMALL)
     time_posted = models.DateTimeField(auto_now_add=True)
-
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    editor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='image_editor')
 
 # Метод обновления онлайн
     @classmethod

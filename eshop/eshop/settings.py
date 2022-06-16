@@ -49,9 +49,11 @@ INSTALLED_APPS = [
     'apps.stats',
     'apps.feedbacks',
     'apps.notifications',
+    'apps.carts',
     'apps.galleries',
     'apps.orders',
     'social_django',
+
 ]
 
 MIDDLEWARE = [
@@ -142,10 +144,7 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -158,6 +157,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+QUANTITY_LIMIT = 10
+
+TOTAL_PRICE_LIMIT = 100000
 
 PROJECT_BASE_URL = 'http://127.0.0.1:8000/'
 
@@ -174,3 +176,4 @@ LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 from .local_settings import *
+

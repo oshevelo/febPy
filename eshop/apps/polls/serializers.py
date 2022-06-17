@@ -7,16 +7,38 @@ class QuestionListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Question
-        fields = ['id', 'pub_date', 'question_text']
+        fields = ['id', 'pub_date', 'length', 'question_text']
 
 
 class QuestionDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ['id', 'pub_date', 'question_text', 'was_published_recently']
+        fields = ['id', 'pub_date',  'question_text', 'length', 'was_published_recently']
         
+    def validate(self, data):
+        print('validate')
+        if data.get('length') == 10 and 'zxc' not in data.get('question_text'):
+            raise serializers.ValidationError('"zxc" not in question_text when length=10')
+        return data
         
+    def validate_length(self, data):
+        print('field length')
+        errors = []
+        if data % 2 != 0:
+            errors.append('length must be even')
+        if data == 3:
+            errors.append('length !=3')
+        if errors:
+            raise serializers.ValidationError(errors)
+        return data
+        
+    def validate_question_text(self, data):
+        print('field question_text')
+        
+        return data
+        
+            
 class QuestionNestedSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     

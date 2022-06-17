@@ -1,6 +1,6 @@
 from django.shortcuts import render
 # Create your views here.
-
+from .filters import PointCountFilter
 from django.db.models import Q
 from .serializers import DiscountModelSerializer,RatingModelSerializer, PointCountModelSerializer
 #from .rest
@@ -13,6 +13,8 @@ from rest_framework import generics
 class DiscountList(generics.ListCreateAPIView):
     queryset = Discount.objects.all()
     serializer_class=DiscountModelSerializer
+    permission_classes=[]
+
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Discount.objects.all()
@@ -27,6 +29,9 @@ class DiscountList(generics.ListCreateAPIView):
 class PointCountList(generics.ListCreateAPIView):
     queryset = PointCount.objects.all()
     serializer_class=PointCountModelSerializer
+    permission_classes=[]
+    filterset_class=PointCountFilter
+
     def get_queryset(self):
         if self.request.user.is_superuser:
             return PointCount.objects.all()
@@ -37,6 +42,8 @@ class PointCountList(generics.ListCreateAPIView):
 class RatingList(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class=RatingModelSerializer
+    permission_classes=[]
+
     def get_queryset(self):
         if self.request.user.is_superuser:
             return PointCount.objects.all()

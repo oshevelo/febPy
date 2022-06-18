@@ -7,23 +7,31 @@ from .serializers import DiscountModelSerializer,RatingModelSerializer, PointCou
 from .models import *
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-
+from .permissions import IsSuperUserOrGetOnly
 
 #class DiscountModelView()
 class DiscountList(generics.ListCreateAPIView):
     queryset = Discount.objects.all()
     serializer_class=DiscountModelSerializer
-    permission_classes=[]
+    permission_classes=[IsSuperUserOrGetOnly]
 
     def get_queryset(self):
         if self.request.user.is_superuser:
             return Discount.objects.all()
         else:
             return Discount.objects.filter(Q(user=self.request.user))
+
+
+class DiscountDetails(generics.RetrieveDestroyAPIView):
+    serializer_class=DiscountModelSerializer
+    permission_classes=[IsSuperUserOrGetOnly]
+
     def get_object(self):
         if self.request.user.is_superuser:
-            return get_object_or_404(Discount,ok=self.kwargs.get("discount_id"))
+            return get_object_or_404(Discount,pk=self.kwargs.get("discount_id"))
         return get_object_or_404(Discount,Q(pk=self.kwargs.get('discount_id'))&Q(user=self.request.user))
+
+
 
 
 class PointCountList(generics.ListCreateAPIView):
@@ -38,6 +46,23 @@ class PointCountList(generics.ListCreateAPIView):
         else:
             return PointCount.objects.filter(Q(user=self.request.user))
 
+    def get_object(self):
+        if self.request.user.is_superuser:
+            return get_object_or_404(PointCount,ok=self.kwargs.get("pointcount_id"))
+        return get_object_or_404(Discount,Q(pk=self.kwargs.get('pointcount_id'))&Q(user=self.request.user))
+
+
+class PointCountDetails(generics.RetrieveDestroyAPIView):
+    serializer_class=PointCountModelSerializer
+    permission_classes=[IsSuperUserOrGetOnly]
+
+    def get_object(self):
+        if self.request.user.is_superuser:
+            return get_object_or_404(PointCount,pk=self.kwargs.get("pointcount_id"))
+        return get_object_or_404(PointCount,Q(pk=self.kwargs.get('pointcount_id'))&Q(user=self.request.user))
+
+
+
 
 class RatingList(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
@@ -46,21 +71,15 @@ class RatingList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return PointCount.objects.all()
-        else:
-            return PointCount.objects.filter(Q(user=self.request.user))
+            return Rating.objects.all()
+        return Rating.objects.filter(Q(user=self.request.user))
 
 
+class RatingDetail(generics.RetrieveDestroyAPIView):
+    serializer_class=RatingModelSerializer
+    permission_classes=[IsSuperUserOrGetOnly]
 
-#class RatingInstance(generics.ListCreateAPIView):
- #   serializer_class=RatingModelSerializer
-
-
-#class DiscountInstance(generics.ListCreateAPIView):
- #   serializer_class = DiscountModelSerializer
-
-#class PointCountInstance(generics.ListCreateAPIView):
- #   serializer_class = PointCountModelSerializer
-  #  permission_classes=[]
-    #def get_object(self):
-     #   return get_object_or_404(PointCount,)
+    def get_object(self):
+        if self.request.user.is_superuser:
+            return get_object_or_404(Rating,pk=self.kwargs.get("rating_id"))
+        return get_object_or_404(Rating,Q(pk=self.kwargs.get('rating_id'))&Q(user=self.request.user))

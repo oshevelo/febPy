@@ -16,7 +16,8 @@ from ..orders.models import Order
 class PointCount(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     points = models.FloatField(validators=[MinValueValidator(0)])
-
+    def __str__(self):
+        return str({"points":self.points,"user":self.user})
 
 #В зависимости от накопленных за определенное время денег у пользователя будет та или иная скидка
 class Discount(models.Model):
@@ -24,6 +25,11 @@ class Discount(models.Model):
     pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
     discount = models.FloatField(default=0.05,validators=[MinValueValidator(0),MaxValueValidator(1)]) #range 0-1. 0.05=5%
     prev_count = models.FloatField(default=0,validators=[MinValueValidator(0)]) #points collected previous month
+
+    def __str__(self):
+        return str({"user":self.user,'pointcount':self.pointcount,'discount':
+                self.discount,'prev_count':self.pointcount})
+
 
 #Чтобы пользователи были ещё больше замотивированы совершать новые покупки,
 #у людей будет высвечиваться то, в каком перцентиле по деньгам, потраченным на покупки, они находятся
@@ -33,6 +39,10 @@ class Rating(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
     percentile=models.FloatField(default=100,validators=[MinValueValidator(0),MaxValueValidator(100)])
+
+    def __str__(self):
+        return str({"user":self.user,'pointcount':self.pointcount,
+                'percentile':self.percentile})
 
 #TO DO
 

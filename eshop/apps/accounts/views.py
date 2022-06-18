@@ -37,7 +37,7 @@ class DiscountDetails(generics.RetrieveDestroyAPIView):
 class PointCountList(generics.ListCreateAPIView):
     queryset = PointCount.objects.all()
     serializer_class=PointCountModelSerializer
-    permission_classes=[]
+    permission_classes=[IsSuperUserOrGetOnly]
     filterset_class=PointCountFilter
 
     def get_queryset(self):
@@ -67,7 +67,7 @@ class PointCountDetails(generics.RetrieveDestroyAPIView):
 class RatingList(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class=RatingModelSerializer
-    permission_classes=[]
+    permission_classes=[IsSuperUserOrGetOnly]
 
     def get_queryset(self):
         if self.request.user.is_superuser:

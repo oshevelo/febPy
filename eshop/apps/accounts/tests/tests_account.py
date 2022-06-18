@@ -11,6 +11,7 @@ class PointCountTest(TestCase):
         user_kw = dict(username='just_user',password='password',email='user@gmail.com')
         user_kw['password'] = make_password(user_kw['password'])
         self.user = User.objects.create(**user_kw)
+
     def test_object_permission(self):
         response = self.c.get('accounts/pointcount')
         print(response.status_code)

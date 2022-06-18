@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import Rating, PointCount, Discount
 
 class RatingAdmin(admin.ModelAdmin):
-    fields=['percentile','points','user']
+    fields=['percentile','pointcount','user']
 
 
 class PointCountAdmin(admin.ModelAdmin):

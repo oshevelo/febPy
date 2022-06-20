@@ -7,13 +7,13 @@ from .serializers import DiscountModelSerializer,RatingModelSerializer, PointCou
 from .models import *
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from .permissions import IsSuperUserOrGetOnly
+from .permissions import IsSuperUserOrSafeOnly
 
 #class DiscountModelView()
 class DiscountList(generics.ListCreateAPIView):
     queryset = Discount.objects.all()
     serializer_class=DiscountModelSerializer
-    permission_classes=[IsSuperUserOrGetOnly]
+    permission_classes=[IsSuperUserOrSafeOnly]
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -24,7 +24,7 @@ class DiscountList(generics.ListCreateAPIView):
 
 class DiscountDetails(generics.RetrieveDestroyAPIView):
     serializer_class=DiscountModelSerializer
-    permission_classes=[IsSuperUserOrGetOnly]
+    permission_classes=[IsSuperUserOrSafeOnly]
 
     def get_object(self):
         if self.request.user.is_superuser:
@@ -37,7 +37,7 @@ class DiscountDetails(generics.RetrieveDestroyAPIView):
 class PointCountList(generics.ListCreateAPIView):
     queryset = PointCount.objects.all()
     serializer_class=PointCountModelSerializer
-    permission_classes=[IsSuperUserOrGetOnly]
+    permission_classes=[IsSuperUserOrSafeOnly]
     filterset_class=PointCountFilter
 
     def get_queryset(self):
@@ -54,7 +54,7 @@ class PointCountList(generics.ListCreateAPIView):
 
 class PointCountDetails(generics.RetrieveDestroyAPIView):
     serializer_class=PointCountModelSerializer
-    permission_classes=[IsSuperUserOrGetOnly]
+    permission_classes=[IsSuperUserOrSafeOnly]
 
     def get_object(self):
         if self.request.user.is_superuser:
@@ -67,7 +67,7 @@ class PointCountDetails(generics.RetrieveDestroyAPIView):
 class RatingList(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class=RatingModelSerializer
-    permission_classes=[IsSuperUserOrGetOnly]
+    permission_classes=[IsSuperUserOrSafeOnly]
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -77,7 +77,7 @@ class RatingList(generics.ListCreateAPIView):
 
 class RatingDetail(generics.RetrieveDestroyAPIView):
     serializer_class=RatingModelSerializer
-    permission_classes=[IsSuperUserOrGetOnly]
+    permission_classes=[IsSuperUserOrSafeOnly]
 
     def get_object(self):
         if self.request.user.is_superuser:

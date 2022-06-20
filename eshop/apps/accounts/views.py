@@ -13,7 +13,7 @@ from .permissions import IsSuperUserOrSafeOnly
 class DiscountList(generics.ListCreateAPIView):
     queryset = Discount.objects.all()
     serializer_class=DiscountModelSerializer
-    permission_classes=[IsSuperUserOrSafeOnly]
+    permission_classes=[]
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -37,7 +37,7 @@ class DiscountDetails(generics.RetrieveDestroyAPIView):
 class PointCountList(generics.ListCreateAPIView):
     queryset = PointCount.objects.all()
     serializer_class=PointCountModelSerializer
-    permission_classes=[IsSuperUserOrSafeOnly]
+    permission_classes=[]
     filterset_class=PointCountFilter
 
     def get_queryset(self):
@@ -67,7 +67,7 @@ class PointCountDetails(generics.RetrieveDestroyAPIView):
 class RatingList(generics.ListCreateAPIView):
     queryset = Rating.objects.all()
     serializer_class=RatingModelSerializer
-    permission_classes=[IsSuperUserOrSafeOnly]
+    permission_classes=[]
 
     def get_queryset(self):
         if self.request.user.is_superuser:

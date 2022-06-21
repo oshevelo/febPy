@@ -55,7 +55,7 @@ class Notification(models.Model):
     source = models.CharField(max_length=200, choices=SOURCE,default=OTHERSOURCE)
     
     def __str__(self):
-        return f"{self.source} {self.recipient} {self.subject} {self.message_text} {self.time_stamp} {self.send_method}"
+        return f"{self.source} {self.recipient} {self.subject} {self.time_stamp} {self.send_method}"
         
         
 

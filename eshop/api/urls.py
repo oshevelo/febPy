@@ -13,5 +13,8 @@ urlpatterns = [
          include('apps.galleries.urls')),
     path('cart/',
          include('apps.carts.urls')),
+    path('notifications/', 
+        include('apps.notifications.urls')),
+
 
 ]

@@ -9,5 +9,6 @@ urlpatterns = [
 
     path('payment/',
          include('apps.payments.urls')),
+    path('accounts/',include('apps.accounts.urls')),
 ]
 

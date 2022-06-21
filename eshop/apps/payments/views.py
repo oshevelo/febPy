@@ -11,21 +11,18 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import viewsets
 from django.contrib.auth.models import User
 from django.db.models import Q
-# from api.permissions import RequestIsReadOnly, RequestIsUpdate, RequestIsDelete
-
-
-
+from api.permissions import RequestIsCreate, RequestIsDelete, RequestIsUpdate, RequestIsReadOnly
 
 
 def Index(request):
-    return HttpResponse('Hello on the Paymant side')
+    return HttpResponse('Hello on payment side')
 
 
 class PaymentList(generics.ListAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentListSerializer
-    permission_classes = [IsAuthenticated]
     pagination_class = pagination.LimitOffsetPagination
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -35,21 +32,11 @@ class PaymentList(generics.ListAPIView):
 
 class PaymentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PaymentListSerializer
-    permission_classes = [
-               IsAuthenticated,
-    #            Or(
-    #                 RequestIsReadOnly,
-    #                 And(
-    #                     RequestIsUpdate,
-    #                     IsEditable
-    #                 ),
-    #                 And(
-    #                      RequestIsDelete,
-    #                      IsOwnedBy
-    #                 )
-    #            )
-         ]
-
+    pagination_class = pagination.LimitOffsetPagination
+    permission_classes = [IsAuthenticated,
+                          Or(RequestIsReadOnly,
+                              And(RequestIsUpdate, IsEditable),
+                              And(RequestIsDelete, IsOwnedBy))]
 
     def get_object(self):
         if self.request.user.is_superuser:
@@ -58,20 +45,5 @@ class PaymentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PaymentCreate(generics.CreateAPIView):
-    # queryset = Payment.objects.all()
     serializer_class = PaymentListSerializer
     permission_classes = [IsAuthenticated]
-
-
-
-# class PaymentSystemLogList(generics.ListAPIView):
-#     queryset = PaymentSystemLog
-#     serializer_class = PaymentSystemLogSerializer
-#     pagination_class = pagination.LimitOffsetPagination
-#     permission_classes = [IsAuthenticated]
-
-
-
-
-
-

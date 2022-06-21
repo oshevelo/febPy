@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import Payment, PaymentSystemLog
 from .permissions import IsEditable, IsOwnedBy
 from .serializers import PaymentListSerializer, PaymentSystemLogSerializer
+from .filters import PaymentFilter
 from rest_framework import generics, pagination
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import viewsets
@@ -23,6 +24,7 @@ class PaymentList(generics.ListAPIView):
     serializer_class = PaymentListSerializer
     pagination_class = pagination.LimitOffsetPagination
     permission_classes = [IsAuthenticated]
+    filterset_class = PaymentFilter
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -46,4 +48,10 @@ class PaymentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class PaymentCreate(generics.CreateAPIView):
     serializer_class = PaymentListSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class PaymentSystemLogList(generics.ListCreateAPIView):
+    queryset = PaymentSystemLog.objects.all()
+    serializer_class = PaymentSystemLogSerializer
     permission_classes = [IsAuthenticated]

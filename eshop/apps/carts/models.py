@@ -13,26 +13,15 @@ class Cart(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name='Updated')
 
     def __str__(self):
-        return f'user - {self.user}'
+        return f'Cart: user - {self.user}'
 
     """ CART TOTAL PRICE """
     @property
     def total_price(self):
         return sum([
             item.product.price * item.quantity for item in self.cart_items.all()
-            if item.cart_item_status == 'Available'
+            if item.cart_item_is_available
         ])
-
-    """ CART ITEM LIST """
-    @property
-    def cart_list(self):
-        return [
-            f'Product name: {item.product.name}, '
-            f'Unit price: {item.product.price}, '
-            f'Quantity: {item.quantity}, '
-            f'Total price: {item.cost_product}'
-            for item in self.cart_items.all() if item.cart_item_status == 'Available'
-        ]
 
     """ CHECK TOTAL PRICE """
     def validate_total_price(self):
@@ -41,14 +30,7 @@ class Cart(models.Model):
                 _('Total price exceeded'),
                 params={'value': TOTAL_PRICE_LIMIT}
             )
-
-    """ CHECK PRODUCT QUANTITY IN CART """
-    def validate_product_quantity_in_cart(self):
-        if self.cart_items.count() > QUANTITY_LIMIT:
-            raise ValidationError(
-                _('Limited product quantity in cart: %(value)s'),
-                params={'value': QUANTITY_LIMIT}
-            )
+        return self.total_price
 
     class Meta:
         verbose_name = 'Cart'
@@ -57,7 +39,6 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     """ CART ITEM """
-    user = models.ForeignKey('auth.User', on_delete=models.PROTECT, verbose_name='User')
     product = models.ForeignKey(Product, on_delete=models.SET_NULL,
                                 null=True, blank=True, verbose_name='Product')
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, verbose_name='Cart', related_name='cart_items')
@@ -72,38 +53,10 @@ class CartItem(models.Model):
     def __str__(self):
         return f'Product: {self.product} - quantity: {self.quantity}'
 
-    """ CHECK PRODUCT QUANTITY """
-    def validate_product_quantity(self):
-        if self.quantity > self.product.amount_in_stock:
-            raise ValidationError(
-                _('Products is available: %(value)s'),
-                params={'value': self.product.amount_in_stock}
-            )
-
     """ CART ITEM STATUS """
     @property
-    def cart_item_status(self):
-        if self.quantity <= self.product.amount_in_stock:
-            return 'Available'
-        elif self.quantity > self.product.amount_in_stock:
-            return f'Insufficient amount'
-
-    @property
-    def product_name(self):
-        return self.product.name
-
-    @property
-    def product_sku(self):
-        return self.product.sku
-
-    @property
-    def product_quantity_available(self):
-        self.product.amount_in_stock -= self.quantity
-        return self.product.amount_in_stock
-
-    @property
-    def unit_price(self):
-        return self.product.price
+    def cart_item_is_available(self):
+        return self.quantity <= self.product.amount_in_stock
 
     @property
     def cost_product(self):

@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import UserAction
+
+
+class UserActionAdmin(admin.ModelAdmin):
+
+    fields = ['user', 'data']
+
+admin.site.register(UserAction, UserActionAdmin)

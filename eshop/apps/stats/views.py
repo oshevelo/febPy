@@ -6,11 +6,12 @@ from .filters import UserActionFilter
 
 
 class UserActionList(generics.ListCreateAPIView):
-    queryset = UserAction.objects.all()
+    queryset = UserAction.objects.order_by('data__action')[:10] #return only current user actions from 0 to 10
     serializer_class = UserActionSerializer
     pagination_class = pagination.LimitOffsetPagination
     filterset_class = UserActionFilter
     permission_classes = [IsAuthenticated]
+
 
 
 

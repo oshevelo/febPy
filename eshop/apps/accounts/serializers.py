@@ -23,10 +23,13 @@ class RatingModelSerializer(serializers.ModelSerializer):
         return Rating.objects.create(**validated_data)
 
     def update(self,instance,validated_data):
-        question_data = validated_data.pop('pointcount')
+        pointcount_data = validated_data.pop('pointcount')
         instance = super().update(instance,validated_data)
-        instance.question_id = question_data.get('id')
+        instance.question_id = pointcount_data.get('id')
         instance.save()
+
+    #def validate(self,data):
+     #   if data.get("")
 
 
 class DiscountModelSerializer(serializers.ModelSerializer):

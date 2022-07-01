@@ -1,17 +1,15 @@
 from django.db import models
-#from django.db import product
-
-# Create your models here.#
-
+from apps.products.models import Product
+from django.contrib.auth.models import User
 
 #Image model
 class Image(models.Model):
-#    product = models.ForeignKey('products.Product', on_delete=models.SET_NULL,
-#                                null=True, blank=True, verbose_name='Product', default='NULL')
-    name = models.CharField(max_length=30, default='NULL')
-    descrption = models.TextField(max_length=1000, default='NULL')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL,
+                               verbose_name='Product', null=True, blank=True)
+    name = models.CharField(max_length=30, null=True, blank=True)
+    descrption = models.TextField(max_length=1000, default='N/A')
 
-    upload = models.ImageField(upload_to='uploads/%Y/%m/%d/', default='NULL')
+    upload = models.ImageField(upload_to='uploads/%Y/%m/%d/', default='uploads/no_image.png')
 
     SMALL = 'SMALL'
     MEDIUM = 'MEDIUM'
@@ -24,12 +22,8 @@ class Image(models.Model):
     ]
     size = models.CharField(max_length=30, choices=SIZE_CHOICE, default=SMALL)
     time_posted = models.DateTimeField(auto_now_add=True)
-
-    def save_image(self):
-        self.save()
-
-    def delete_image(self):
-        self.delete()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    editor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='image_editor')
 
 # Метод обновления онлайн
     @classmethod
@@ -40,4 +34,3 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
-

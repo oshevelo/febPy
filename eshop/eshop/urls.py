@@ -32,6 +32,6 @@ urlpatterns = [
          name='logout'),
 #    path('notifications/', include('apps.notifications.urls')),
     path('notifications/', include('apps.notifications.urls')),
-    path('orders/', include('apps.orders.urls')),
+    #path('orders/', include('apps.orders.urls')),
 #s GET request like http://127.0.0.1:8000/activate/?token=4c3a4188-6060-4f09-954e-f473ff9f214b
 ]

@@ -11,24 +11,26 @@ class ProductNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        read_only_fields = ['id', 'name', 'price', 'description'] #"sku" or "id"
+        read_only_fields = ['name', 'price', 'description']
+        fields = read_only_fields + ['id']
 
 
 class OrderItemDetailSerializer(serializers.ModelSerializer):
-    products = ProductNestedSerializer(read_only=True)
+    product = ProductNestedSerializer()
 
     class Meta:
         model = Order
-        fields = ['products', 'quantity']
+        fields = ['product', 'quantity']
 
     def create(self, validated_data):
-        products_data = validated_data.pop('products')
-        validated_data.update({'products_id': products_data.get('id')})
-        return OrderItem.products.create(**validated_data)
+        product_data = validated_data.pop('product')
+        validated_data.update({'product_id': product_data.get('id')})
+        return OrderItem(**validated_data)
 
     def update(self, instance, validated_data):
-        products_data = validated_data.pop('products')
-        instance.products_id = products_data.get('id')
+        product_data = validated_data.pop('product')
+        instance = super().update(instance, validated_data)
+        instance.product_id = product_data.get('id')
         instance.save()
         return instance
 
@@ -38,20 +40,27 @@ class OrderItemNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        read_only_fields = ['products', 'quantity']
+        fields = ['product', 'quantity']
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
-    order_items = OrderItemNestedSerializer(many=True, read_only=True)
+    order_item = OrderItemNestedSerializer()
 
     class Meta:
         model = Order
-        fields = ['id', 'order', 'date_created', 'last_updated', 'order_type', 'user', 'value', 'products']
+        fields = ['id', 'order', 'date_created', 'last_updated', 'order_type', 'user', 'value', 'product']
 
     def create(self, validated_data):
-        order_items_data = validated_data.pop('order_items')
-        validated_data.update({'order_items_id': order_items_data.get('id')})
-        return Order.order_items.create(**validated_data)
+        order_item_data = validated_data.pop('order_item')
+        validated_data.update({'order_item_id': order_item_data.get('id')})
+        return Order(**validated_data)
+
+    def update(self, instance, validated_data):
+        order_item_data = validated_data.pop('order_item')
+        instance = super().update(instance, validated_data)
+        instance.order_item_id = order_item_data.get('id')
+        instance.save()
+        return instance
 
 
 class OrderListSerializer(serializers.ModelSerializer):

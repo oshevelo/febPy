@@ -2,6 +2,7 @@ from django.urls import path, include
 
 
 urlpatterns = [
+    path('orders/', include('apps.orders.urls')),
     path('polls/',
         include('apps.polls.urls')),
     path('userprofile/',
@@ -15,6 +16,4 @@ urlpatterns = [
          include('apps.carts.urls')),
     path('notifications/', 
         include('apps.notifications.urls')),
-
-
 ]

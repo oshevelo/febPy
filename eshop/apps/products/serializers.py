@@ -24,12 +24,7 @@ class CommentsDetailsSerilizer(serializers.ModelSerializer):
         model = Comments
         fields = ['product', 'user', 'text', 'product_rating', 'pub_date']
 
-class CategoryListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['category_name', 'parent_category']
-
-class CategoryDetailsSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['category_name', 'parent_category']

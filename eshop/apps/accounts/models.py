@@ -74,35 +74,33 @@ def create_rating(sender,instance,created,**kwargs):
 #Эта функция будет проверена и раскоменчена, когда у меня будет возможность создавать заказы
 #через админку.
 
-#@receiver(pre_save,sender=Order)
-#def update_from_orders(sender,instance,created,**kwargs):
- #   if not created:
-  #      for item in iter(kwargs.get("updated_fields")):
-   #         if item=='ORDER_TYPE':
-    #            old_instance=Order.objects.get(instance.id)
-     #           old_status=old_instance.status
-      #          if datetime.dtatime.now().day>14:
-                    #if old_status=='PAID' and instance.status=='CANCELLED':
-                     #   user_count = PointCount.objects.get(user=instance.user)
-                      #  user_count.points-=instance.price
-                       # user_count.save()
-                    #elif instance.status=='PAID':
-                     #   user_count = PointCount.objects.get(user=instance.user)
-                      #  user_count.points+=instance.price
-                       # user_count.save()
-                #else:
-                 #   user_discount = Discount.objects.get(user=instance.user)
-                  #  if old_status=='PAID' and instance.status=='CANCELLED':
-                   #     user_discount.prev_count-=instance.price
-                    #    user_discount.save()
-                   # elif instance.status=='PAID':
-                    #    user_count = PointCount.objects.get(user=instance.user)
-                     #   user_count.points+=instance.price
-                      #  user_count.save()
-    #else:
-     #   if instance.status=='PAID':
-      #      user_count = PointCount.objects.get(user=instance.user)
-       #     user_count+=instance.price
+@receiver(pre_save,sender=Order)
+def update_from_orders(sender,instance,created,**kwargs):
+    if not created:
+        for item in iter(kwargs.get("updated_fields")):
+            if item=='ORDER_TYPE':
+                old_instance=Order.objects.get(instance.id)
+                old_status=old_instance.status
+                price = instance.order_value
+                status = instance.status
+                old_month = old_instance.month
+                month = datetime.datetime.now().month
+                day = datetime.datetime.now().day
+                user = instance.user
+                pointcount = PointCount.objects.get(user=user)
+                discount = Discount.objects.get(user=user)
+
+                if status=='PAID':
+                    pointcount.points+=price
+                    pointcount.save()
+                elif status=='CANCELED' and old_status=='PAID':
+                    if day<14 and old_month!=month:
+                        discount.prev_count-=price
+                        discount.save()
+                    else:
+                        pointcount.points-=price
+                        pointcount.save()
+
 
 
 

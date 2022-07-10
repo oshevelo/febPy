@@ -21,7 +21,7 @@ class PaymentList(generics.ListAPIView):
     serializer_class = PaymentListSerializer
     pagination_class = pagination.LimitOffsetPagination
     permission_classes = [IsAuthenticated]
-    filterset_class = PaymentFilter
+    filter_class = PaymentFilter
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -52,3 +52,13 @@ class PaymentSystemLogList(generics.ListCreateAPIView):
     queryset = PaymentSystemLog.objects.all()
     serializer_class = PaymentSystemLogSerializer
     permission_classes = [IsAuthenticated]
+
+
+class PaymentSystemLogDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PaymentSystemLogSerializer
+
+    def get_object(self):
+        if self.request.user.is_superuser:
+            return get_object_or_404(PaymentSystemLog, pk=self.kwargs.get('paymentlog_id'))
+        return get_object_or_404(PaymentSystemLog, pk=self.kwargs.get('paymentlog_id'), owner=self.request.user)

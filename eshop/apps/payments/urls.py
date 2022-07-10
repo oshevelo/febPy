@@ -19,5 +19,5 @@ urlpatterns = [
     path('pay/<int:payment_id>/', views.PaymentDetail.as_view(), name='PaymentDetail'),
     path('pay/create/', views.PaymentCreate.as_view(), name='PaymentCreate'),
     path('log/', views.PaymentSystemLogList.as_view(), name='PaymentLogList'),
-
+    path('log/<int:paymentlog_id>/', views.PaymentSystemLogDetail.as_view(), name='PaymentLogDetail')
 ]

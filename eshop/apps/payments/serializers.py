@@ -8,8 +8,8 @@ class PaymentNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        fields = ['id', 'system', 'status', 'products_price', 'delivery_price']
-        read_only_fields = ['system', 'status', 'products_price', 'delivery_price']
+        fields = ['owner', 'editor', 'id', 'system', 'status', 'products_price', 'delivery_price']
+        read_only_fields = ['owner', 'editor', 'system', 'status', 'products_price', 'delivery_price']
 
 
 class PaymentSystemLogSerializer(serializers.ModelSerializer):
@@ -24,6 +24,11 @@ class PaymentSystemLogSerializer(serializers.ModelSerializer):
         validated_data.update({'payment_id': payment_data.get('id')})
         return PaymentSystemLog.objects.create(**validated_data)
 
+    def update(self, instance, validated_data):
+        payment_data = validated_data.pop('payment')
+        validated_data.update({'payment_id': payment_data.get('id')})
+        return PaymentSystemLog.objects.create(**validated_data)
+
 
 class PaymentListSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -32,6 +37,4 @@ class PaymentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ['owner', 'editor', 'id', 'system', 'status', 'products_price', 'delivery_price']
-
-
 

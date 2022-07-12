@@ -16,7 +16,7 @@ def Index(request):
     return HttpResponse('Hello on payment side')
 
 
-class PaymentList(generics.ListAPIView):
+class PaymentList(generics.ListCreateAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentListSerializer
     pagination_class = pagination.LimitOffsetPagination
@@ -41,11 +41,6 @@ class PaymentDetail(generics.RetrieveUpdateDestroyAPIView):
         if self.request.user.is_superuser:
             return get_object_or_404(Payment, pk=self.kwargs.get('payment_id'))
         return get_object_or_404(Payment, Q(pk=self.kwargs.get('payment_id')) & (Q(owner=self.request.user) | Q(editor=self.request.user)))
-
-
-class PaymentCreate(generics.CreateAPIView):
-    serializer_class = PaymentListSerializer
-    permission_classes = [IsAuthenticated]
 
 
 class PaymentSystemLogList(generics.ListCreateAPIView):

@@ -2,21 +2,16 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
+from .test_user import user_kw #using user from another modul
 from apps.stats.models import UserAction
 
 from django.utils import timezone
 
 
 class UserActionTest(TestCase):
-    def setUp(self) -> None:
+    def setUp(self):
         self.c = APIClient()
-        user_kw = dict(
-            username='admin',
-            password='111',
-            email='admin' + '@gmail.com',
-        )
-        user_kw['password'] = make_password(user_kw['password'])
+
         self.user = User.objects.create(**user_kw)
 
     def test_list_check_permission(self):
@@ -36,7 +31,7 @@ class UserActionTest(TestCase):
         })
 
     def test_list_no_empty(self):
-        new_user_action = UserAction.objects.create(user=User.objects.get(username='admin'), data='', pub_date=timezone.now())
+        new_user_action = UserAction.objects.create(data='', pub_date=timezone.now())
         self.c.login(username=self.user.username, password='111')
         response = self.c.get('/stat/')
         print(response.data)
@@ -47,10 +42,9 @@ class UserActionTest(TestCase):
             "previous": None,
             "results": [
                 {
-                    "id": 1,
-                    "user": "admin",
+                    "id": new_user_action.id,
                     'data': "",
-                    "pub_date": timezone.now()
+                    "pub_date": new_user_action.pub_date
                 }
             ]
         })

@@ -6,7 +6,7 @@ from .models import UserAction
 
 
 class UserActionFilter(FilterSet):
-    user = django_filters.CharFilter(field_name="user", lookup_expr='icontains')
+    user = django_filters.CharFilter(field_name="user__email", lookup_expr='icontains')
 
     class Meta:
         model = UserAction

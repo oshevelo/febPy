@@ -8,6 +8,13 @@ class UserActionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserActionNestedSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = UserAction
+        read_only_fields = ['pub_date', 'data']
+        fields = read_only_fields + ['id']
 
 
 # authentication_classes = (SessionAuthentication, BasicAuthentication)

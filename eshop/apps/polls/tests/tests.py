@@ -40,7 +40,7 @@ class RecalculationProfileChildrenChanges(TestCase):
             "results": []
         })
         
-        
+"""        
     def test_list_empty(self):
         new_question = Question.objects.create(question_text='asdasd', pub_date=datetime.now())
         new_question = Question.objects.create(question_text='asdasd', pub_date=datetime.now(), author=self.user)
@@ -57,4 +57,4 @@ class RecalculationProfileChildrenChanges(TestCase):
             "results": []
         })
         
-
+"""

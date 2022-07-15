@@ -43,17 +43,30 @@ class OrderItemNestedSerializer(serializers.ModelSerializer):
         fields = ['product', 'quantity']
 
 
+class ShipmentNestedSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = OrderItem
+        fields = ['delivery_company', 'delivery_office_number', 'addressee_last_name']
+
+
 class OrderDetailSerializer(serializers.ModelSerializer):
     order_item = OrderItemNestedSerializer()
+    shipment = ShipmentNestedSerializer()
 
     class Meta:
         model = Order
-        fields = ['id', 'order', 'date_created', 'last_updated', 'order_type', 'user', 'value', 'product']
+        fields = ['id', 'order', 'date_created', 'last_updated', 'order_type', 'user', 'value', 'product', 'shipment']
+
+    def __parce_nested(self, validated_data, field_name, prop_name):
+        order_item_data = validated_data.pop(field_name)
+        validated_data.update({prop_name: order_item_data.get('id')})
+        return validated_data
 
     def create(self, validated_data):
-        order_item_data = validated_data.pop('order_item')
-        validated_data.update({'order_item_id': order_item_data.get('id')})
-        return Order(**validated_data)
+        validated_data = self.__parce_nested(validated_data, 'order_item', 'order_item_id')
+        return Order.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         order_item_data = validated_data.pop('order_item')
@@ -64,7 +77,8 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Order
         fields = ['id', 'order', 'date_created', 'last_updated', 'order_type', 'user', 'value']
+
+

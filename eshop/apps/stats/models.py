@@ -17,9 +17,15 @@ class UserAction(models.Model):
     #anon = User.get_anonymous()
 
     # считаем кол-во походов на сайт
-
-    def count_entrance_user(self, user=user):
+    def count_entrance_user(self, user):
         return UserAction.object.filter(data__action='login', user=user).count()
+
+    # считаем время нахождения на сайте
+    def count_time(self, user): #add time to using site
+        if UserAction.object.filter(data__action='logout', user=user).exists() and UserAction.object.filter(
+                data__action='login', user=user).last():
+            return UserAction.object.filter(data__action='logout', user=user).last().pub_date()-\
+                UserAction.object.filter(data__action='login', user=user).last().pub_date()
 
 
 

@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 class Question(models.Model):
     question_text = models.CharField(max_length=20)
     pub_date = models.DateTimeField('date published')
+    length = models.IntegerField(null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     editor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='edited_questions')
     is_sold = models.BooleanField(default=False)

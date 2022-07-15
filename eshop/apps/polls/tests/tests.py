@@ -40,19 +40,19 @@ class RecalculationProfileChildrenChanges(TestCase):
             "results": []
         })
 
-    def test_list_empty(self):
-        new_question = Question.objects.create(question_text='asdasd', pub_date=datetime.now())
-        new_question = Question.objects.create(question_text='asdasd', pub_date=datetime.now(), author=self.user)
-        self.c.login(username=self.user.username, password='111')
-        response = self.c.get('/api/polls/question/')
-
-        print(response.data)
-        # print(dir(status))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, {
-            "count": 0,
-            "next": None,
-            "previous": None,
-            "results": []
-        })
+    # def test_list_empty(self):
+    #     new_question = Question.objects.create(question_text='asdasd', pub_date=datetime.now())
+    #     new_question = Question.objects.create(question_text='asdasd', pub_date=datetime.now(), author=self.user)
+    #     self.c.login(username=self.user.username, password='111')
+    #     response = self.c.get('/api/polls/question/')
+    #
+    #     print(response.data)
+    #     print(dir(status))
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     self.assertEqual(response.data, {
+    #         "count": 0,
+    #         "next": None,
+    #         "previous": None,
+    #         "results": []
+    #     })
         

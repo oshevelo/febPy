@@ -1,18 +1,17 @@
+import utils
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
-from .test_user import user_kw #using user from another modul
+from ....utils.helpers_for_tests import create_user  # using user from another modul
 from apps.stats.models import UserAction
-
 from django.utils import timezone
 
 
 class UserActionTest(TestCase):
     def setUp(self):
         self.c = APIClient()
-
-        self.user = User.objects.create(**user_kw)
+        self.user = create_user('anastas')
+        print(self.user)
 
     def test_list_check_permission(self):
         response = self.c.get('/stat/')
@@ -48,5 +47,3 @@ class UserActionTest(TestCase):
                 }
             ]
         })
-
-

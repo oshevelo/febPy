@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from .filters import UserActionFilter
 
 
-class UserActionList(generics.ListCreateAPIView):
+class UserLastTenActionList(generics.ListCreateAPIView):
     queryset = UserAction.objects.order_by('data__action')[:10] #return only current user actions from 0 to 10
     serializer_class = UserActionSerializer
     pagination_class = pagination.LimitOffsetPagination

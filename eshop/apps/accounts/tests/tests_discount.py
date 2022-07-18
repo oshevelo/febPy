@@ -39,3 +39,8 @@ class DiscountTest(TestCase):
         self.c.login(username=self.user.username, password='password')
         response = self.c.delete(f'/api/accounts/discount/{self.user.id}/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_put(self):
+        self.c.login(username=self.user.username, password='password')
+        response = self.c.put(f'/api/accounts/discount/{self.user.id}/', data={'points': 100}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

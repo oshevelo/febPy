@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from ..models import PointCount, Rating, Discount
+import json
 from django.urls import reverse
 
 class PointCountTest(TestCase):
@@ -19,21 +20,18 @@ class PointCountTest(TestCase):
     response = self.c.get('/api/accounts/pointcount/')
     self.assertEqual(response.status_code,status.HTTP_200_OK)
     self.assertEqual(len(response.data['results']),1)
-    print(response.data['results'][0]['user'],self.user.id)
     self.assertEqual(response.data['results'][0]['user'],self.user.id)
 
    def test_this_users_account_permission(self):
         self.c.login(username=self.user.username, password='password')
         response = self.c.get(f'/api/accounts/pointcount/{self.user.id}/')
-        print(response.data)
         self.assertEqual(response.data,{'user': self.user.id, 'points': 0.0}
 )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
    def test_other_users_pointcount_permission(self):
         self.c.login(username=self.user.username, password='password')
-        response = self.c.get(f'/api/accounts/pointcount/3/',follow=True)
-        print('response other user',response.status_code)
+        response = self.c.get(f'/api/accounts/pointcount/{self.superuser.id}/',follow=True)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -42,7 +40,9 @@ class PointCountTest(TestCase):
        response = self.c.delete(f'/api/accounts/pointcount/{self.user.id}/')
        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+
    def test_put(self):
        self.c.login(username=self.user.username, password='password')
-       response = self.c.put(f'/api/accounts/pointcount/{self.user.id}/',{'points':100}, format='json')
-       self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+       response = self.c.put(f'/api/accounts/pointcount/{self.user.id}',
+                             {'points': 100}, format='json', follow=True)
+       self.assertEqual(response.status_code,status.HTTP_403_FORBIDDEN)

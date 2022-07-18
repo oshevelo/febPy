@@ -4,7 +4,8 @@ from rest_framework.permissions import SAFE_METHODS
 
 class IsSuperUserOrSafeOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method == 'DELETE' and not request.user.is_superuser:
+        print(request.method, 'PERMISSIONS')
+        if request.method in ('DELETE','PUT','PATCH') and not request.user.is_superuser:
             return False
         return True
 

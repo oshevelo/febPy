@@ -47,4 +47,3 @@ class PaymentListSerializer(serializers.ModelSerializer):
         if data.get('delivery_price') > data.get('products_price'):
             raise serializers.ValidationError('delivery is higher than the product price')
         return data
-

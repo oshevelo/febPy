@@ -5,9 +5,9 @@ from django.db.models.signals import post_save,pre_save
 from django.core.validators import MinValueValidator,MaxValueValidator
 
 # Create your models here.
-import datetime
-from django.db.models import Sum
-from ..orders.models import Order
+# import datetime
+# from django.db.models import Sum
+# from ..orders.models import Order
 
 #class OrderPreviousStatus(models.Model):
  #   order=models.OneToOneField(Order,on_delete='cascade')

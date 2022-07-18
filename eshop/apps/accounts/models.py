@@ -38,7 +38,7 @@ class Discount(models.Model):
 class Rating(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     pointcount = models.OneToOneField(PointCount,on_delete=models.CASCADE)
-    percentile=models.FloatField(default=100,validators=[MinValueValidator(0),MaxValueValidator(100)])
+    percentile=models.FloatField(default=0,validators=[MinValueValidator(0),MaxValueValidator(100)])
 
     def __str__(self):
         return str({"user":self.user,'pointcount':self.pointcount,

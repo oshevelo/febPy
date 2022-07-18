@@ -33,9 +33,10 @@ class RatingModelSerializer(serializers.ModelSerializer):
         instance.question_id = pointcount_data.get('id')
         instance.save()
 
-    # def validate(self,data):
-    #   if data.get("")
-
+    #def validate(self,data):
+     #  if data.get("percentile") > 1 or data.get('percentile') < 0:
+      #     raise serializers.ValidationError("Improper value. percentile must be between 0 and 1")
+       #return data
 
 class DiscountModelSerializer(serializers.ModelSerializer):
     pointcount = PointCountNestedSerializer()

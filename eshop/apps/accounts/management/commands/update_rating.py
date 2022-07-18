@@ -13,7 +13,7 @@ class Command(BaseCommand): #update discount 14th of every month
         ratings.sort(key=get_points)
         total_ratings = len(ratings)
         for i,el in enumerate(ratings):
-            new_rate = (i+1)/total_ratings
+            new_rate = (i+1)/total_ratings * 100
             el.percentile = new_rate
             el.save()
         self.stdout.write("Rating updated!")

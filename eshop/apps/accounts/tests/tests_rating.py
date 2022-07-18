@@ -20,7 +20,6 @@ class RatingTest(TestCase):
         response = self.c.get('/api/accounts/rating/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
-        print(response.data['results'][0]['user'], self.user.id)
         self.assertEqual(response.data['results'][0]['user'], self.user.id)
 
     def test_this_users_account_permission(self):
@@ -31,8 +30,6 @@ class RatingTest(TestCase):
     def test_other_users_pointcount_permission(self):
         self.c.login(username=self.user.username, password='password')
         response = self.c.get(f'/api/accounts/rating/{self.user.id-1}/', follow=True)
-        print('response other user', response.status_code)
-        print(self.user.id)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 

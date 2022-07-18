@@ -47,7 +47,11 @@ class RecalculationProfileChildrenChanges(TestCase):
     #     response = self.c.get('/api/polls/question/')
     #
     #     print(response.data)
+<<<<<<< HEAD
     #     # print(dir(status))
+=======
+    #     print(dir(status))
+>>>>>>> 21f8da7f8d26c834dd13ceb897b6ee1fc7cd0e87
     #     self.assertEqual(response.status_code, status.HTTP_200_OK)
     #     self.assertEqual(response.data, {
     #         "count": 0,

@@ -28,17 +28,14 @@ class PointCountTest(TestCase):
         self.c.login(username=self.user.username, password='password')
         response = self.c.get(f'/api/accounts/pointcount/{self.user.id}/')
         self.assertEqual(response.data,{'user': self.user.id, 'points': 0.0})
-        print(response.data)
         self.assertEqual(response.data, {'user': self.user.id, 'points': 0.0})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
     def test_other_users_pointcount_permission(self):
         self.c.login(username=self.user.username, password='password')
         response = self.c.get(f'/api/accounts/pointcount/{self.superuser.id}/',follow=True)
-        print('response other user', response.status_code)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        # конечно, здесь и будет возвращаться 404, потому что объекта с id=3 попросту нет. Т.е. это тест на
-        # наличие объекта, а не на действие permissions
 
 
     def test_delete_object(self):
@@ -51,7 +48,7 @@ class PointCountTest(TestCase):
         self.c.login(username=self.user.username, password='password')
         response = self.c.put(f'/api/accounts/pointcount/{self.user.id}/', {'points': 100}, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        # нужно попробовать такой же тест провести под суперюзером, чтобы убедиться, что суперюзер может делать PUT
+
 
     def test_put_superuser(self):
         self.c.force_login(self.superuser)

@@ -20,7 +20,6 @@ class DiscountTest(TestCase):
         response = self.c.get('/api/accounts/discount/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 1)
-        print(response.data['results'][0]['user'], self.user.id)
         self.assertEqual(response.data['results'][0]['user'], self.user.id)
 
     def test_this_users_account_permission(self):
@@ -46,8 +45,6 @@ class DiscountTest(TestCase):
         self.c.login(username=self.user.username, password='password')
         response = self.c.put(f'/api/accounts/discount/{self.user.id}/', {'discount': 0.1}, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        # нужно попробовать такой же тест провести под суперюзером, чтобы убедиться, что суперюзер может делать PUT
-
 
     def test_put_superuser(self):
         self.c.force_login(self.superuser)

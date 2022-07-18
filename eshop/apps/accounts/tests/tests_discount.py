@@ -13,6 +13,7 @@ class DiscountTest(TestCase):
         user_kw = dict(username='just_user', password='password', email='user@gmail.com')
         user_kw['password'] = make_password(user_kw['password'])
         self.user = User.objects.create(**user_kw)
+        self.superuser = User.objects.create_superuser(username='admin', email='admin@test.com', password='password')
 
     def test_list_permissions(self):
         self.c.login(username=self.user.username, password='password')
@@ -38,9 +39,23 @@ class DiscountTest(TestCase):
     def test_delete_object(self):
         self.c.login(username=self.user.username, password='password')
         response = self.c.delete(f'/api/accounts/discount/{self.user.id}/')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
     def test_put(self):
         self.c.login(username=self.user.username, password='password')
-        response = self.c.put(f'/api/accounts/discount/{self.user.id}/', data={'points': 100}, format='json')
+        response = self.c.put(f'/api/accounts/discount/{self.user.id}/', {'discount': 0.1}, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        # нужно попробовать такой же тест провести под суперюзером, чтобы убедиться, что суперюзер может делать PUT
+
+
+    def test_put_superuser(self):
+        self.c.force_login(self.superuser)
+        response = self.c.put(f'/api/accounts/discount/{self.user.id}', {'pointcount': self.user.id, 'prev_count': 100, 'discount': 0.9, }, format='json', follow = True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+    def test_delete_superuser(self):
+        self.c.force_login(self.superuser)
+        response = self.c.delete(f'/api/accounts/discount/{self.user.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

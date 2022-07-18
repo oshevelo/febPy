@@ -1,3 +1,6 @@
+from datetime import time, date
+
+import rest_framework.settings
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -5,36 +8,42 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from apps.userprofiles.models import UserProfile
 
-
 user_kw = dict(
-            username='admin',
-            password='111',
-            email='admin' + '@gmail.com',
-        )
+    username='admin',
+    password='111',
+    email='admin' + '@gmail.com',
+)
 
 user_kw['password'] = make_password(user_kw['password'])
 
 test_profile_correct = {'username': 'admin',
-             'first_name': 'First',
-             'last_name': 'Last',
-             'date_of_birth': '1990-11-11',
-             'sex': 'MALE',
-             'preferable_language': 'UA',
-             'addresses_of_delivery': ['address1', 'address2'],
-             'telephones': ['1234-5678', '5432-1256'],
-             'additional_emails': ['admin@gmail.com', 'admin2@meta.ua']
-             }
+                        'first_name': 'First',
+                        'last_name': 'Last',
+                        'date_of_birth': '1990-11-11',
+                        'sex': 'MALE',
+                        'preferable_language': 'UA',
+                        'addresses_of_delivery': ['address1', 'address2'],
+                        'telephones': ['1234-5678', '5432-1256'],
+                        'additional_emails': ['admin@gmail.com', 'admin2@meta.ua']
+                        }
 
 test_profile_incorrect = {'username': 'admin',
-             'first_name': 'First',
-             'last_name': 'Last',
-             'date_of_birth': '90-11-11',
-             'sex': 'MALE',
-             'preferable_language': 'UA',
-             'addresses_of_delivery': ['address1', 'address2'],
-             'telephones': ['1234-5678', '5432-1256'],
-             'additional_emails': ['admingmail.com', 'admin2meta.ua']
-             }
+                          'first_name': 'First',
+                          'last_name': 'Last',
+                          'date_of_birth': '90-11-11',
+                          'sex': 'MALE',
+                          'preferable_language': 'UA',
+                          'addresses_of_delivery': ['address1', 'address2'],
+                          'telephones': ['1234-5678', '5432-1256'],
+                          'additional_emails': ['admingmail.com', 'admin2meta.ua']
+                          }
+
+
+def get_datetime_format(value):
+    if value.lower() == 'iso-8601':
+        return '%Y-%m-%d'
+    else:
+        return value
 
 
 class UserProfileTest(TestCase):
@@ -50,7 +59,8 @@ class UserProfileTest(TestCase):
                          {'username': 'admin',
                           'first_name': '',
                           'last_name': '',
-                          'date_of_birth': str(UserProfile.objects.get(user_id=self.user.id).date_of_birth),
+                          'date_of_birth': UserProfile.objects.get(user_id=self.user.id).date_of_birth. \
+                                           strftime(get_datetime_format(rest_framework.settings.api_settings.DATETIME_FORMAT)),
                           'sex': 'OTHER',
                           'preferable_language': 'EN',
                           'addresses_of_delivery': None,

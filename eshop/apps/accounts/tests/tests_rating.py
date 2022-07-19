@@ -54,8 +54,3 @@ class RatingTest(TestCase):
         response = self.c.delete(f'/api/accounts/rating/{self.user.id}/')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_limit(self):
-        self.c.force_login(self.superuser)
-        response = self.c.put(f'/api/accounts/rating/{self.user.id}', {'percentile': 459}, format='json',
-                              follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)

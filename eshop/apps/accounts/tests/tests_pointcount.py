@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 from ..models import PointCount, Rating, Discount
 import json
 from django.urls import reverse
+from collections import OrderedDict
 
 
 class PointCountTest(TestCase):
@@ -21,8 +22,13 @@ class PointCountTest(TestCase):
         self.c.login(username=self.user.username,password='password')
         response = self.c.get('/api/accounts/pointcount/')
         self.assertEqual(response.status_code,status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']),1)
-        self.assertEqual(response.data['results'][0]['user'],self.user.id)
+        self.assertEqual(response.data, OrderedDict(
+            [('count', 1),
+             ('next', None),
+             ('previous', None),
+             ('results', [
+                 OrderedDict([("user", self.user.id),("points", 0.0)]),])]))
+
 
     def test_this_users_account_permission(self):
         self.c.login(username=self.user.username, password='password')
@@ -49,11 +55,24 @@ class PointCountTest(TestCase):
         response = self.c.put(f'/api/accounts/pointcount/{self.user.id}/', {'points': 100}, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_patch(self):
+        self.c.login(username=self.user.username, password='password')
+        response = self.c.patch(f'/api/accounts/pointcount/{self.user.id}/', {'points': 100}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
 
     def test_put_superuser(self):
         self.c.force_login(self.superuser)
         response = self.c.put(f'/api/accounts/pointcount/{self.user.id}', {'points': 100}, format='json', follow = True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+    def test_patch_superuser(self):
+        self.c.force_login(self.superuser)
+        response = self.c.patch(f'/api/accounts/pointcount/{self.user.id}', {'points': 100}, format='json', follow = True)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 
     def test_delete_superuser(self):

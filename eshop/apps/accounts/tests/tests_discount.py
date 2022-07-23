@@ -81,7 +81,7 @@ class DiscountTest(TestCase):
                                "prev_count": 100.0}
                               , format='json', follow = True)
 
-        obj = Discount.objects.get(pk=self.user.id)
+        obj = Discount.objects.get(user=self.user.id)
         obj.refresh_from_db()
 
         self.assertEqual(response.data, {"user": self.user.id,
@@ -103,7 +103,7 @@ class DiscountTest(TestCase):
                                "prev_count": 100.0}
                               , format='json', follow = True)
 
-        obj = Discount.objects.get(pk=self.user.id)
+        obj = Discount.objects.get(user=self.user.id)
         obj.refresh_from_db()
 
         self.assertEqual(response.data, {"user": self.user.id,

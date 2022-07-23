@@ -64,15 +64,18 @@ class PointCountTest(TestCase):
 
     def test_put_superuser(self):
         self.c.force_login(self.superuser)
-        response = self.c.put(f'/api/accounts/pointcount/{self.user.id}', {'points': 100}, format='json', follow = True)
+        data = {'points': 100,'user':self.user.id}
+        response = self.c.put(f'/api/accounts/pointcount/{self.user.id}', data, format='json', follow = True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+        self.assertEqual(response.data,data)
 
     def test_patch_superuser(self):
         self.c.force_login(self.superuser)
-        response = self.c.patch(f'/api/accounts/pointcount/{self.user.id}', {'points': 100}, format='json', follow = True)
+        data = {'points': 100, 'user':self.user.id}
+        response = self.c.patch(f'/api/accounts/pointcount/{self.user.id}',
+                                data, format='json', follow = True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+        self.assertEqual(response.data, {'user':self.user.id,'points': 100})
 
 
     def test_delete_superuser(self):

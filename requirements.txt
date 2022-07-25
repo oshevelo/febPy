@@ -11,3 +11,4 @@ phonenumbers==8.12.48
 psycopg2-binary==2.9.3
 Pillow==9.1.1
 social-auth-app-django==5.0.0
+rest_condition==1.0.3

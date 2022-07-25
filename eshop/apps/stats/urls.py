@@ -5,5 +5,5 @@ from . import views
 app_name = 'stats'
 
 urlpatterns = [
-    path('', views.UserActionList.as_view()),
+    path('', views.UserLastTenActionList.as_view()),
 ]

@@ -18,11 +18,11 @@ class UserProfileDetail(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
 
     def get_object(self):
-        if self.request.user.is_authenticated:
+        # if self.request.user.is_authenticated:
             return get_object_or_404(UserProfile,
                                      user=self.request.user)
-        else:
-            raise Http404
+        # else:
+        #     raise Http404
 
 
 class UserCreate(generics.CreateAPIView):

@@ -1,9 +1,5 @@
-from django.shortcuts import render
-# Create your views here.
-# from .filters import PointCountFilter
 from django.db.models import Q
 from .serializers import DiscountModelSerializer, RatingModelSerializer, PointCountModelSerializer
-# from .rest
 from .filters import PointCountFilter, DiscountFilter, RatingFilter
 from .models import *
 from django.shortcuts import get_object_or_404
@@ -31,9 +27,6 @@ class DiscountDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsSuperUserOrSafeOnly]
 
     def get_object(self):
-        # if self.request.user.is_superuser:
-        #     return get_object_or_404(Discount, pk=self.kwargs.get("discount_id"))
-        # return get_object_or_404(Discount, Q(pk=self.kwargs.get('discount_id')) & Q(user=self.request.user))
         obj = get_object_or_404(Discount, pk=self.kwargs.get("discount_id"))
         self.check_object_permissions(self.request, obj)
         return obj
@@ -82,9 +75,6 @@ class RatingDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, IsSuperUserOrSafeOnly]
 
     def get_object(self):
-        # if self.request.user.is_superuser:
-        #     return get_object_or_404(Rating, pk=self.kwargs.get("rating_id"))
-        # return get_object_or_404(Rating, Q(pk=self.kwargs.get('rating_id')) & Q(user=self.request.user))
         obj = get_object_or_404(Rating, pk=self.kwargs.get("rating_id"))
         self.check_object_permissions(self.request, obj)
         return obj

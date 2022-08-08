@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -72,15 +73,17 @@ class RatingTest(TestCase):
 
     def test_put_superuser(self):
         self.c.force_login(self.superuser)
-        response = self.c.put(f'/api/accounts/discount/{self.user.id}', {'percentile': 0.94 }, format='json', follow = True)
+        response = self.c.put(f'/api/accounts/rating/{self.user.id}/', {'percentile': 0.94, 'user':self.user.id, 'pointcount': OrderedDict([('points', 0), ('id', self.user.id)])}, format='json', follow = True)
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data,{'user': self.user.id, 'percentile': 0.94, 'pointcount': OrderedDict([('points', 0), ('id', self.user.id)])})
 
     def test_patch_superuser(self):
         self.c.force_login(self.superuser)
-        response = self.c.patch(f'/api/accounts/discount/{self.user.id}', {'percentile': 0.94 }, format='json', follow = True)
+        response = self.c.patch(f'/api/accounts/rating/{self.user.id}/', {'percentile': 0.94 }, format='json', follow = True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
+        self.assertEqual(response.data, {'user': self.user.id, 'percentile': 0.94,
+                                         'pointcount': OrderedDict([('points', 0), ('id', self.user.id)])})
 
     def test_delete_superuser(self):
         self.c.force_login(self.superuser)

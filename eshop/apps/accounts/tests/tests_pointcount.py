@@ -16,7 +16,7 @@ class PointCountTest(TestCase):
         user_kw['password'] = make_password(user_kw['password'])
         self.user = User.objects.create(**user_kw)
         self.superuser = User.objects.create_superuser(username='admin', email='admin@test.com', password='password')
-
+        self.pointcount = PointCount.objects.get(user=self.user)
 
     def test_list_permissions(self):
         self.c.login(username=self.user.username,password='password')
@@ -65,17 +65,18 @@ class PointCountTest(TestCase):
     def test_put_superuser(self):
         self.c.force_login(self.superuser)
         data = {'points': 100,'user':self.user.id}
-        response = self.c.put(f'/api/accounts/pointcount/{self.user.id}', data, format='json', follow = True)
+        response = self.c.put(f'/api/accounts/pointcount/{self.pointcount.pk}/', data, format='json', follow = True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data,data)
 
     def test_patch_superuser(self):
         self.c.force_login(self.superuser)
-        data = {'points': 100, 'user':self.user.id}
-        response = self.c.patch(f'/api/accounts/pointcount/{self.user.id}',
+        data = {'points': 1000}
+        response = self.c.patch(f'/api/accounts/pointcount/{self.pointcount.pk}/',
                                 data, format='json', follow = True)
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, {'user':self.user.id,'points': 100})
+        self.assertEqual(response.data, {'points':1000,'user':self.user.id})
 
 
     def test_delete_superuser(self):

@@ -27,17 +27,17 @@ class RatingModelSerializer(serializers.ModelSerializer):
         validated_data = self.__parce_nested(validated_data, 'pointcount', 'pointcount_id',)
         return Rating.objects.create(**validated_data)
 
-    def update(self, instance, validated_data):
-        pointcount_data = validated_data.pop('pointcount')
+    def update(self, instance,validated_data):
+        pointcount_data = validated_data.pop('pointcount', None)
         instance = super().update(instance, validated_data)
-        instance.pointcount_id = pointcount_data.get('id')
-        instance.save()
+        if pointcount_data:
+            instance.pointcount_id = pointcount_data.get('id')
+            instance.save()
         return instance
 
 
 class DiscountModelSerializer(serializers.ModelSerializer):
     pointcount = PointCountNestedSerializer()
-
     class Meta:
         model = Discount
         fields = ['user', 'pointcount', 'discount', 'prev_count']
@@ -45,7 +45,6 @@ class DiscountModelSerializer(serializers.ModelSerializer):
     def __parce_nested(self, validated_data, field_name, prop_name):
         pointcount_data = validated_data.pop(field_name)
         validated_data.update({prop_name: pointcount_data.get("id")})
-        validated_data.update({prop_name: pointcount_data.get("points")})
         return validated_data
 
     def create(self, validated_data):
@@ -53,11 +52,11 @@ class DiscountModelSerializer(serializers.ModelSerializer):
         return Discount.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        pointcount_data = validated_data.pop('pointcount')
+        pointcount_data = validated_data.pop('pointcount', None)
         instance = super().update(instance, validated_data)
-        instance.pointcount_id = pointcount_data.get('id')
-        instance.pointcount_points = pointcount_data.get('points')
-        instance.save()
+        if pointcount_data:
+            instance.pointcount_id = pointcount_data.get('id')
+            instance.save()
         return instance
 
 
@@ -65,7 +64,3 @@ class PointCountModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = PointCount
         fields = ['user', 'points']
-    def update(self,instance,validated_data):
-        instance = super().update(instance,validated_data)
-        instance.save()
-        return instance

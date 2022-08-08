@@ -14,6 +14,7 @@ class DiscountTest(TestCase):
         user_kw['password'] = make_password(user_kw['password'])
         self.user = User.objects.create(**user_kw)
         self.superuser = User.objects.create_superuser(username='admin', email='admin@test.com', password='password')
+        self.discount = Discount.objects.get(user=self.user)
 
 
     def test_list_permissions(self):
@@ -74,43 +75,27 @@ class DiscountTest(TestCase):
 
     def test_put_superuser(self):
         self.c.force_login(self.superuser)
-        response = self.c.put(f'/api/accounts/discount/{self.user.id}',
+        response = self.c.put(f'/api/accounts/discount/{self.discount.id}/',
                               {"user": self.user.id,
                                "pointcount": OrderedDict([("points", 0.0), ("id", self.user.id)]),
                                "discount": 0.9,
                                "prev_count": 100.0}
                               , format='json', follow = True)
-
-        obj = Discount.objects.get(user=self.user.id)
-        obj.refresh_from_db()
-
-        self.assertEqual(response.data, {"user": self.user.id,
-                                         "pointcount": OrderedDict([("points", 0.0),
-                                                                    ("id", self.user.id)]),
-                                         "discount": 0.9,
-                                         "prev_count": 100.0})
-
+        print(response.data)
+        self.assertEqual(response.data, {'user': self.user.id, 'pointcount': OrderedDict([('points', 0.0), ('id', self.user.id)]), 'discount': 0.9, 'prev_count': 100.0}
+)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 
     def test_patch_superuser(self):
         self.c.force_login(self.superuser)
-        response = self.c.patch(f'/api/accounts/discount/{self.user.id}',
-                              {"user": self.user.id,
-                               "pointcount": OrderedDict([("points", 0.0), ("id", self.user.id)]),
-                               "discount": 0.9,
+        response = self.c.patch(f'/api/accounts/discount/{self.user.id}/',
+                              {
                                "prev_count": 100.0}
                               , format='json', follow = True)
-
-        obj = Discount.objects.get(user=self.user.id)
-        obj.refresh_from_db()
-
-        self.assertEqual(response.data, {"user": self.user.id,
-                                         "pointcount": OrderedDict([("points", 0.0),
-                                                                    ("id", self.user.id)]),
-                                         "discount": 0.9,
-                                         "prev_count": 100.0})
+        self.assertEqual(response.data, {'user': self.user.id, 'pointcount': OrderedDict([('points', 0.0), ('id', self.user.id)]), 'discount': 0.05, 'prev_count': 100.0}
+)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

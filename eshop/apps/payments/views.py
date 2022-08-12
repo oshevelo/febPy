@@ -38,9 +38,12 @@ class PaymentDetail(generics.RetrieveUpdateDestroyAPIView):
                               And(RequestIsDelete, IsOwnedBy))]
 
     def get_object(self):
-        if self.request.user.is_superuser:
-            return get_object_or_404(Payment, pk=self.kwargs.get('payment_id'))
-        return get_object_or_404(Payment, Q(pk=self.kwargs.get('payment_id')) & (Q(owner=self.request.user) | Q(editor=self.request.user)))
+        # if self.request.user.is_superuser:
+        #     return get_object_or_404(Payment, pk=self.kwargs.get('payment_id'))
+        # return get_object_or_404(Payment, Q(pk=self.kwargs.get('payment_id')) & (Q(owner=self.request.user) | Q(editor=self.request.user)))
+        obj = get_object_or_404(Payment, pk=self.kwargs.get('payment_id'))
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class PaymentSystemLogList(generics.ListCreateAPIView):

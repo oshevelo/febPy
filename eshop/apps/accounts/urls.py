@@ -2,10 +2,10 @@ from django.urls import path
 
 from .import views
 
-app_name = 'accounts'
+# app_name = 'accounts'
 
 urlpatterns = [
-    path('pointcount', views.PointCountList.as_view(), name='list'),
+    path('pointcount/', views.PointCountList.as_view(), name='list'),
     path('pointcount/<int:pointcount_id>/', views.PointCountDetails.as_view(), name='details'),
 
     path('discount/', views.DiscountList.as_view(), name='list'),
